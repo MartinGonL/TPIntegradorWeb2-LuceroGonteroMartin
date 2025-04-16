@@ -1,0 +1,22 @@
+{
+  "name": "tpintegradorweb2-lucerogonteromartin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinGonL/TPIntegradorWeb2-LuceroGonteroMartin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinGonL/TPIntegradorWeb2-LuceroGonteroMartin/issues"
+  },
+  "homepage": "https://github.com/MartinGonL/TPIntegradorWeb2-LuceroGonteroMartin#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
