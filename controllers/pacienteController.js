@@ -2,6 +2,13 @@ const Paciente = require('../models/pacienteModel.js');
 const PacienteController = {
     async insertar(req, res) {
         try {
+            const { nombre, apellido, dni, fechaNacimiento, telefono, email } = req.body;
+    
+            // Validar campos requeridos
+            if (!nombre || !apellido || !dni || !fechaNacimiento || !telefono || !email) {
+                return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+            }
+    
             const paciente = req.body;
             await Paciente.insertar(paciente);
             res.status(201).json({ message: 'Paciente creado exitosamente' });
@@ -9,8 +16,9 @@ const PacienteController = {
             console.error(error);
             res.status(500).json({ error: 'Error al crear el paciente' });
         }
-    },
+        },
 
+    
     async actualizar(req, res) {
         try {
             const id = req.params.id;
@@ -35,6 +43,7 @@ const PacienteController = {
     },
 
     mostrarFormularioNuevo: (req, res) => {
-        res.render('pacientes/nuevo');
+        res.render('paciente/nuevo'); 
     },
 }
+module.exports = PacienteController;
