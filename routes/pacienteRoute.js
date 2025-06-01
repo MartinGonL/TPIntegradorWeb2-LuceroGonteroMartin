@@ -1,17 +1,14 @@
+
 const express = require('express');
 const router = express.Router();
-const pacienteController = require('../controllers/pacienteController');
+const PacienteController = require('../controllers/pacienteController.js');
 
-// Ruta para mostrar el formulario de registro de un nuevo paciente
-router.get('/nuevo', pacienteController.mostrarFormularioNuevo);
-
-// Ruta para insertar un nuevo paciente
-router.post('/nuevo', pacienteController.insertar);
-
-// Ruta para actualizar un paciente (ejemplo)
-router.put('/:id', pacienteController.actualizar);
-
-// Ruta para eliminar un paciente (ejemplo)
-router.delete('/:id', pacienteController.eliminar);
-
+router.get('/', PacienteController.listarPacientes);             // Ruta para listar todos los pacientes
+router.get('/nuevo', PacienteController.mostrarFormularioNuevo); // Ruta para mostrar el formulario de nuevo paciente
+router.post('/', PacienteController.insertar);                   // Ruta para manejar el envío del formulario de nuevo paciente
+router.get('/:id', PacienteController.verPaciente);              // Ruta para ver un paciente específico
+router.get('/:id/edit', PacienteController.mostrarFormularioEditar); // Ruta para mostrar el formulario de edición de paciente
+router.post('/:id/actualizar', PacienteController.actualizarPaciente); // Ruta para procesar la actualización del paciente
+router.post('/:id/delete', PacienteController.eliminarPaciente);   // Ruta para procesar la eliminación del paciente
+router.post('/:id/alta', PacienteController.darDeAltaPaciente); // Ruta para dar de alta a un paciente
 module.exports = router;
