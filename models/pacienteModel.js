@@ -1,37 +1,91 @@
-const db = require('../config/db.js');
+const pool = require('../config/db');
+
 const Paciente = {
 
-    async insertar(paciente) {
-        const { nombre, apellido, dni}= paciente;
-        await db.query(
-            'INSERT INTO pacientes (nombre, apellido, dni) VALUES (?, ?, ?)',
-            [nombre, apellido, dni]
-        )
+    insertar: async (datosPaciente) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [resultado] = await conexion.query("INSERT INTO pacientes SET ?", datosPaciente);
+            return resultado.insertId; 
+        } catch (error) {
+            console.error('Error en Paciente.insertar:', error);
+            throw error; 
+        } finally {
+            if (conexion) conexion.release(); 
+        }
     },
 
-    async actualizar(id, paciente) {
-        const { nombre, apellido, dni } = paciente;
-        await db.query('UPDATE pacientes SET nombre = ?, apellido = ?, dni = ? WHERE id = ?',
-            [nombre, apellido, dni, id]);
-    },
-    
-    async eliminar(id) {
-        await db.query('DELETE FROM pacientes WHERE id = ?', [id]);
-    },
-
-    async obtenerPorId(id) {
-        const [rows] = await db.query('SELECT * FROM pacientes WHERE id = ?', [id]);
-        return rows[0];
-    },
-
-    async obtenerTodos() {
-        const [rows] = await db.query('SELECT * FROM pacientes');
-        return rows;
+    buscarPorDni: async (dni) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [filas] = await conexion.query("SELECT * FROM pacientes WHERE dni = ?", [dni]);
+            return filas.length > 0 ? filas[0] : null; 
+        } catch (error) {
+            console.error('Error en Paciente.buscarPorDni:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
     },
 
-    async obtenerPorNombre (nombre) {
-        const [rows] = await db.query('SELECT * FROM pacientes WHERE nombre LIKE ?', [`%${nombre}%`]);
-        return rows;
+    buscarPorId: async (id) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [filas] = await conexion.query("SELECT * FROM pacientes WHERE id = ?", [id]);
+            return filas.length > 0 ? filas[0] : null; 
+        } catch (error) {
+            console.error('Error en Paciente.buscarPorId:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
+    },
+
+
+    listarTodos: async () => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [filas] = await conexion.query("SELECT * FROM pacientes ORDER BY apellido, nombre");
+            return filas; 
+        } catch (error) {
+            console.error('Error en Paciente.listarTodos:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
+    },
+
+    actualizar: async (id, datosPaciente) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();   
+            const [resultado] = await conexion.query("UPDATE pacientes SET ? WHERE id = ?", [datosPaciente, id]);
+            return resultado.affectedRows; 
+        } catch (error) {
+            console.error('Error en Paciente.actualizar:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
+    },
+
+
+    eliminar: async (id) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [resultado] = await conexion.query("DELETE FROM pacientes WHERE id = ?", [id]);
+            return resultado.affectedRows; 
+        } catch (error) {
+            console.error('Error en Paciente.eliminar:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
     }
 };
 
