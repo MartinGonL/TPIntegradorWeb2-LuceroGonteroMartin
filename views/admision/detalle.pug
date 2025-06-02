@@ -9,7 +9,7 @@ block content
       div.card-header Detalles del Paciente 
       div.card-body
         p.card-text 
-          strong Nombre:
+          strong Nombre: 
           | #{paciente.nombre} #{paciente.apellido}
         p.card-text 
           strong DNI: 
@@ -20,10 +20,10 @@ block content
   // Sección de Información de la Admisión
   if admision
     div.card.mt-3
-      div.card-header Detalles de la Admisión
+      div.card-header Detalles de la Admisión 
       div.card-body
         dl.row
-          dt.col-sm-4 ID de Admisión
+          dt.col-sm-4 ID de Admisión 
           dd.col-sm-8= admision.id
           
           dt.col-sm-4 Fecha de Admisión
@@ -37,8 +37,7 @@ block content
           
           dt.col-sm-4 Diagnóstico Inicial
           dd.col-sm-8 
-            pre= admision.diagnostico_inicial || 'N/A'
-            
+            pre= admision.diagnostico_inicial || 'N/A' 
           dt.col-sm-4 Estado de Admisión
           dd.col-sm-8
             span(class=`badge badge-${admision.estado_admision === 'Activa' ? 'success' : 'secondary'}`)= admision.estado_admision
@@ -48,42 +47,41 @@ block content
       h4 Actualizar Estado de Admisión 
       form(method="POST" action=`/admisiones/${admision.id}/actualizar-estado` class="form-inline")
         div.form-group.mr-2
-          label(for="nuevo_estado" class="mr-2") Nuevo Estado:
+          label(for="nuevo_estado" class="mr-2") Nuevo Estado: 
           select#nuevo_estado.form-control(name="nuevo_estado" required)
             option(value="Activa" selected=admision.estado_admision === 'Activa') Activa
             option(value="Completada" selected=admision.estado_admision === 'Completada') Completada
             option(value="Cancelada" selected=admision.estado_admision === 'Cancelada') Cancelada
-        button(type="submit" class="btn btn-warning") Actualizar Estado
+        button(type="submit" class="btn btn-warning") Actualizar Estado 
         
   else
-    p.mt-3.alert.alert-warning Datos de la admisión no disponibles.
+    p.mt-3.alert.alert-warning Datos de la admisión no disponibles. 
 
   hr
-  div.mt-3
-    if paciente && paciente.id
-      a(href=`/pacientes/${paciente.id}` class="btn btn-secondary") Volver a Detalles del Paciente 
-    else if admision && admision.paciente_id
-      a(href=`/pacientes/${admision.paciente_id}` class="btn btn-secondary") Volver a Detalles del Paciente 
-    else
-      a(href="/pacientes" class="btn btn-secondary") Volver a Lista de Pacientes
+  // Contenedor flex para alinear y separar los botones
+  div.mt-3.d-flex.flex-wrap.gap-2.botones-admision
+  if admision && admision.estado_admision === 'Activa'
+    form(method="POST" action=`/asignaciones-cama/admision/${admision.id}/liberar-cama` style="display:contents;")
+      button.btn.btn-violeta.w-100(type="submit" onclick="return confirm('¿Está seguro de que desea liberar la cama para esta admisión?');") Liberar Cama
+    // Salto de línea
+    div.w-100
 
-    if admision && admision.estado_admision === 'Activa'
-     
-      a(href=`/asignaciones-cama/admision/${admision.id}/asignar-cama/ui` class="btn btn-primary ml-2") Asignar Cama
+    // Segunda fila de botones, todos con flex-grow
+    div.d-flex.flex-row.flex-grow-1.w-100
+      a.btn.btn-violeta.flex-fill.mr-2(href=`/asignaciones-cama/admision/${admision.id}/asignar-cama/ui`) Asignar Cama 
+      if paciente && paciente.id
+        a.btn.btn-violeta.flex-fill.mr-2(href=`/pacientes/${paciente.id}`) Volver a Detalles del Paciente 
+      else if admision && admision.paciente_id
+        a.btn.btn-violeta.flex-fill.mr-2(href=`/pacientes/${admision.paciente_id}`) Volver a Detalles del Paciente 
+      else
+        a.btn.btn-violeta.flex-fill.mr-2(href="/pacientes") Volver a Lista de Pacientes 
 
-      form(method="POST" action=`/asignaciones-cama/admision/${admision.id}/liberar-cama` style="display: inline-block; margin-left: 10px;")
-        button(type="submit" class="btn btn-info" onclick="return confirm('¿Está seguro de que desea liberar la cama para esta admisión?');") Liberar Cama 
-
-      // Enlaces de Evaluación de Enfermería (condicional a admisión activa)
       if evaluacionEnfermeria 
-        a(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}` class="btn btn-info ml-2") Ver Evaluación Enfermería 
+        a.btn.btn-violeta.flex-fill.mr-2(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}`) Ver Evaluación Enfermería 
       else
-        a(href=`/evaluaciones-enfermeria/admision/${admision.id}/nueva` class="btn btn-success ml-2") Registrar Evaluación Enfermería
-      
-      // Enlaces de Evaluación Médica (condicional a admisión activa)
+        a.btn.btn-violeta.flex-fill.mr-2(href=`/evaluaciones-enfermeria/admision/${admision.id}/nueva`) Registrar Evaluación Enfermería 
+
       if evaluacionesMedicas && evaluacionesMedicas.length > 0
-        
-        a(href=`/evaluaciones-medicas/${evaluacionesMedicas[0].id}` class="btn btn-info ml-2") Ver Evaluación(es) Médica(s) 
-       
+        a.btn.btn-violeta.flex-fill(href=`/evaluaciones-medicas/${evaluacionesMedicas[0].id}`) Ver Evaluación(es) Médica(s) 
       else
-        a(href=`/evaluaciones-medicas/admision/${admision.id}/nueva` class="btn btn-primary ml-2") Registrar Evaluación Médica 
+        a.btn.btn-violeta.flex-fill(href=`/evaluaciones-medicas/admision/${admision.id}/nueva`) Registrar Evaluación Médica
