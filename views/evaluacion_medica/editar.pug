@@ -1,0 +1,111 @@
+extends ../../layout
+
+block content
+  h1 #{title} 
+
+  // Información de Contexto
+  if admision && paciente
+    div.row.mt-3.mb-3
+      div.col-md-6
+        div.card
+          div.card-header Detalles de la Admisión 
+          div.card-body
+            p.card-text #[strong ID de Admisión:] #{admision.id} 
+            p.card-text #[strong Fecha de Admisión:] #{admision.fecha_admision ? new Date(admision.fecha_admision).toLocaleString() : 'N/A'} 
+      div.col-md-6
+        div.card
+          div.card-header Detalles del Paciente 
+          div.card-body
+            p.card-text #[strong Nombre:] #{paciente.nombre} #{paciente.apellido} 
+            p.card-text #[strong DNI:] #{paciente.dni}
+  else
+    p.alert.alert-warning Información de contexto (Admisión/Paciente) no disponible. 
+
+  if evaluacionEnfermeria
+    div.card.mt-3.mb-3
+      div.card-header Evaluación de Enfermería Vinculada 
+      div.card-body
+        p.card-text #[strong ID Evaluación Enf.:] #{evaluacionEnfermeria.id} 
+        p.card-text #[strong Fecha Evaluación Enf.:] #{evaluacionEnfermeria.fecha_evaluacion ? new Date(evaluacionEnfermeria.fecha_evaluacion).toLocaleString() : 'N/A'} 
+        p.card-text
+          a(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}`) Ver Detalles de Evaluación de Enfermería 
+
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg 
+  
+  if evaluacionMedica && evaluacionMedica.id 
+    form(method="POST" action=`/evaluaciones-medicas/${evaluacionMedica.id}/actualizar`)
+      
+      if evaluacionMedica.evaluacion_enfermeria_id
+        input(type="hidden" name="evaluacion_enfermeria_id" value=evaluacionMedica.evaluacion_enfermeria_id)
+
+      
+      h3.mt-4 Información General
+      div.form-group.mt-3
+        label(for="medico_id") Médico ID:
+        input(type="text" id="medico_id" name="medico_id" value=evaluacionMedica.medico_id required class="form-control")
+
+      
+      h3.mt-4 Diagnósticos
+      div.form-group.mt-3
+        label(for="diagnostico_principal") Diagnóstico Principal:
+        textarea#diagnostico_principal.form-control(name="diagnostico_principal" rows="3" required) #{evaluacionMedica.diagnostico_principal}
+      
+      div.form-group.mt-3
+        label(for="diagnosticos_secundarios") Diagnósticos Secundarios:
+        textarea#diagnosticos_secundarios.form-control(name="diagnosticos_secundarios" rows="3") #{evaluacionMedica.diagnosticos_secundarios || ''}
+
+      
+      h3.mt-4 Plan de Tratamiento
+      div.form-group.mt-3
+        label(for="plan_tratamiento_inicial") Plan de Tratamiento Inicial (Resumen):
+        textarea#plan_tratamiento_inicial.form-control(name="plan_tratamiento_inicial" rows="4" required) #{evaluacionMedica.plan_tratamiento_inicial}
+
+      div.form-group.mt-3
+        label(for="tratamiento_farmacologico") Tratamiento Farmacológico:
+        textarea#tratamiento_farmacologico.form-control(name="tratamiento_farmacologico" rows="3") #{evaluacionMedica.tratamiento_farmacologico || ''}
+        
+      div.form-group.mt-3
+        label(for="tratamiento_no_farmacologico") Tratamiento No Farmacológico:
+        textarea#tratamiento_no_farmacologico.form-control(name="tratamiento_no_farmacologico" rows="3") #{evaluacionMedica.tratamiento_no_farmacologico || ''}
+
+      div.form-group.mt-3
+        label(for="procedimientos_medicos") Procedimientos Médicos Indicados:
+        textarea#procedimientos_medicos.form-control(name="procedimientos_medicos" rows="3") #{evaluacionMedica.procedimientos_medicos || ''}
+
+      div.form-group.mt-3
+        label(for="interconsultas_solicitadas") Interconsultas Solicitadas:
+        textarea#interconsultas_solicitadas.form-control(name="interconsultas_solicitadas" rows="3") #{evaluacionMedica.interconsultas_solicitadas || ''}
+        
+      
+      h3.mt-4 Pruebas Diagnósticas
+      div.form-group.mt-3
+        label(for="solicitud_pruebas_diagnosticas") Solicitud de Pruebas Diagnósticas:
+        textarea#solicitud_pruebas_diagnosticas.form-control(name="solicitud_pruebas_diagnosticas" rows="3") #{evaluacionMedica.solicitud_pruebas_diagnosticas || ''}
+
+      
+      h3.mt-4 Evolución y Seguimiento
+      div.form-group.mt-3
+        label(for="observaciones_evolucion") Observaciones de Evolución:
+        textarea#observaciones_evolucion.form-control(name="observaciones_evolucion" rows="3") #{evaluacionMedica.observaciones_evolucion || ''}
+        
+      div.form-group.mt-3
+        label(for="recomendaciones_alta_seguimiento") Recomendaciones para Alta y Seguimiento:
+        textarea#recomendaciones_alta_seguimiento.form-control(name="recomendaciones_alta_seguimiento" rows="3") #{evaluacionMedica.recomendaciones_alta_seguimiento || ''}
+
+      
+      h3.mt-4 Notas Adicionales
+      div.form-group.mt-3
+        label(for="notas_medicas_adicionales") Notas Médicas Adicionales:
+        textarea#notas_medicas_adicionales.form-control(name="notas_medicas_adicionales" rows="3") #{evaluacionMedica.notas_medicas_adicionales || ''}
+
+      button(type="submit" class="btn btn-primary mt-3") Actualizar Evaluación Médica 
+      a(href=`/evaluaciones-medicas/${evaluacionMedica.id}` class="btn btn-secondary mt-3 ml-2") Cancelar 
+  else
+    p.alert.alert-danger Datos de la evaluación médica no disponibles para edición. 
+    a(href="/admisiones" class="btn btn-secondary mt-3") Volver a Lista de Admisiones 

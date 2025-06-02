@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg 
+  
+  if cama && cama.id 
+    form(method="POST" action=`/camas/${cama.id}/actualizar`)
+      div.form-group.mt-3
+        label(for="habitacion_id") Habitación: 
+        select#habitacion_id.form-control(name="habitacion_id" required)
+          option(value="") -- Seleccione Habitación -- 
+          if habitaciones
+            each habitacionInList in habitaciones
+              
+              option(value=habitacionInList.id selected=cama.habitacion_id == habitacionInList.id) #{habitacionInList.ala_nombre} - Hab. #{habitacionInList.numero_habitacion} (Capacidad: #{habitacionInList.capacidad})
+
+      div.form-group.mt-3
+        label(for="codigo_cama") Código de Cama: 
+        input(type="text" id="codigo_cama" name="codigo_cama" value=cama.codigo_cama required class="form-control")
+
+      div.form-group.mt-3
+        label(for="estado_cama") Estado: 
+        select#estado_cama.form-control(name="estado_cama" required)
+          if estadosCama
+            each estadoInList in estadosCama 
+              option(value=estadoInList selected=cama.estado_cama === estadoInList) #{estadoInList}
+          else
+            
+            option(value=cama.estado_cama selected=true) #{cama.estado_cama}
+
+
+      button(type="submit" class="btn btn-primary mt-3") Actualizar Cama 
+      a(href="/camas" class="btn btn-secondary mt-3 ml-2") Cancelar
+  else
+    p Datos de la cama no disponibles para edición. 
+    a(href="/camas" class="btn btn-secondary mt-3") Volver a la Lista de Camas 

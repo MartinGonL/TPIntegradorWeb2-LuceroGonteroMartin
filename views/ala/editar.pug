@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg 
+  
+  if ala && ala.id 
+    form(method="POST" action=`/alas/${ala.id}/actualizar`)
+      div.form-group.mt-3
+        label(for="nombre") Nombre:
+        input(type="text" id="nombre" name="nombre" value=ala.nombre required class="form-control")
+
+      div.form-group.mt-3
+        label(for="descripcion") Descripción:
+        textarea#descripcion.form-control(name="descripcion" rows="3") #{ala.descripcion || ''}
+
+      button(type="submit" class="btn btn-primary mt-3") Actualizar Ala 
+      a(href="/alas" class="btn btn-secondary mt-3 ml-2") Cancelar 
+  else
+    p Datos del ala no disponibles para edición. 
+    a(href="/alas" class="btn btn-secondary mt-3") Volver a la Lista de Alas 
