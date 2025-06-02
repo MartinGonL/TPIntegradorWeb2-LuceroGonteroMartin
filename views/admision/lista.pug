@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+  hr
+
+  if admisiones && admisiones.length > 0
+    div.table-responsive
+      table.table.table-striped.table-hover.table-bordered
+        thead.thead-dark
+          tr
+            th ID Admisión 
+            th DNI Paciente 
+            th Nombre Paciente 
+            th Fecha Admisión 
+            th Tipo 
+            th Estado 
+            th Acciones 
+        tbody
+          each admision in admisiones
+            tr
+              td= admision.id
+              td= admision.paciente_dni
+              td #{admision.paciente_apellido}, #{admision.paciente_nombre}
+              td= admision.fecha_admision ? new Date(admision.fecha_admision).toLocaleDateString() : 'N/A'
+              td= admision.tipo_admision
+              td 
+                span(class=`badge badge-${admision.estado_admision === 'Activa' ? 'success' : 'secondary'}`)= admision.estado_admision
+              td
+                a(href=`/admisiones/${admision.id}` class="btn btn-info btn-sm") Ver Detalles 
+                if admision.estado_admision === 'Activa'
+                  form(method="POST" action=`/admisiones/${admision.id}/actualizar-estado` style="display: inline; margin-left: 5px;")
+                    input(type="hidden" name="nuevo_estado" value="Completada")
+                    button(type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Marcar esta admisión como Completada?');") Completar 
+  else
+    p.mt-3 No se encontraron admisiones en el sistema. 

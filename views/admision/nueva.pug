@@ -1,0 +1,40 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+  if paciente
+    h3.mt-3 Paciente: #{paciente.nombre} #{paciente.apellido} (DNI: #{paciente.dni}) 
+  else if paciente_id
+    p.text-warning Detalles del paciente no cargados completamente, pero la admisión puede ser registrada para el Paciente ID: #{paciente_id}. 
+  else
+    p.text-danger Error crítico: ID del paciente no disponible para la admisión. Por favor, regrese. 
+
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg 
+  form(method="POST" action="/admisiones")
+    
+    input(type="hidden" name="paciente_id" value=paciente_id || (paciente ? paciente.id : ''))
+
+    div.form-group.mt-3
+      label(for="tipo_admision") Tipo de Admisión:
+      select#tipo_admision.form-control(name="tipo_admision" required)
+        option(value="" selected=!(datosAdmision && datosAdmision.tipo_admision)) -- Seleccione Tipo -- 
+        option(value="Programada" selected=(datosAdmision && datosAdmision.tipo_admision === 'Programada')) Programada
+        option(value="Derivación Médica" selected=(datosAdmision && datosAdmision.tipo_admision === 'Derivación Médica')) Derivación Médica
+        option(value="Emergencia" selected=(datosAdmision && datosAdmision.tipo_admision === 'Emergencia')) Emergencia
+
+    div.form-group.mt-3
+      label(for="medico_referente") Médico Referente:
+      input(type="text" id="medico_referente" name="medico_referente" value=datosAdmision && datosAdmision.medico_referente ? datosAdmision.medico_referente : '' class="form-control")
+
+    div.form-group.mt-3
+      label(for="diagnostico_inicial") Diagnóstico Inicial:
+      textarea#diagnostico_inicial.form-control(name="diagnostico_inicial" rows="3") #{datosAdmision && datosAdmision.diagnostico_inicial ? datosAdmision.diagnostico_inicial : ''}
+
+    button(type="submit" class="btn btn-primary mt-3") Registrar Admisión 
+    a(href=`/pacientes/${paciente_id || (paciente ? paciente.id : '')}` class="btn btn-secondary mt-3 ml-2") Cancelar y Volver al Paciente 
