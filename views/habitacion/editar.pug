@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+
+  
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg 
+  
+  if habitacion && habitacion.id 
+    form(method="POST" action=`/habitaciones/${habitacion.id}/actualizar`)
+      div.form-group.mt-3
+        label(for="ala_id") Ala: 
+        select#ala_id.form-control(name="ala_id" required)
+          option(value="") -- Seleccione Ala -- 
+          if alas
+            each alaInList in alas
+              option(value=alaInList.id selected=habitacion.ala_id == alaInList.id) #{alaInList.nombre}
+
+      div.form-group.mt-3
+        label(for="numero_habitacion") Número de Habitación: 
+        input(type="text" id="numero_habitacion" name="numero_habitacion" value=habitacion.numero_habitacion required class="form-control")
+
+      div.form-group.mt-3
+        label(for="tipo") Tipo: 
+        input(type="text" id="tipo" name="tipo" value=habitacion.tipo required class="form-control" placeholder="ej., Privada, Compartida, UCI") 
+
+      div.form-group.mt-3
+        label(for="capacidad") Capacidad: 
+        input(type="number" id="capacidad" name="capacidad" value=habitacion.capacidad required min="1" class="form-control")
+
+      div.form-group.mt-3
+        label(for="descripcion") Descripción:
+        textarea#descripcion.form-control(name="descripcion" rows="3") #{habitacion.descripcion || ''}
+
+      button(type="submit" class="btn btn-primary mt-3") Actualizar Habitación 
+      a(href="/habitaciones" class="btn btn-secondary mt-3 ml-2") Cancelar 
+  else
+    p Datos de la habitación no disponibles para edición. 
+    a(href="/habitaciones" class="btn btn-secondary mt-3") Volver a la Lista de Habitaciones 
