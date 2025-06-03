@@ -5,6 +5,10 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
+    width: 100%;
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
   }
   
   header {
