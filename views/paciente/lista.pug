@@ -23,7 +23,7 @@ block content
             th Email
             th Domicilio
             th Localidad
-            th Acciones // Translated
+            th Acciones
         tbody
           each paciente in pacientes
             tr
@@ -36,10 +36,11 @@ block content
               td= paciente.domicilio
               td= paciente.localidad
               td
-                a(href=`/pacientes/${paciente.id}/edit` class="btn btn-warning btn-sm mr-1") Editar 
-                a(href=`/admisiones/nueva?paciente_id=${paciente.id}` class="btn btn-success btn-sm mr-1") Nueva Admisión 
-                form(method="POST" action=`/pacientes/${paciente.id}/delete` style="display: inline;")
-                  button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este paciente?');") Eliminar 
+                div.d-flex.flex-column
+                  a(href=`/pacientes/${paciente.id}/edit` class="btn btn-warning btn-sm mb-1") Editar 
+                  a(href=`/admisiones/nueva?paciente_id=${paciente.id}` class="btn btn-success btn-sm mb-1") Nueva Admisión 
+                  form(method="POST" action=`/pacientes/${paciente.id}/delete` style="display: inline;")
+                    button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este paciente?');") Eliminar 
   else
     p.mt-3 No se encontraron pacientes. 
       a(href="/pacientes/nuevo") ¡Registrar uno!
