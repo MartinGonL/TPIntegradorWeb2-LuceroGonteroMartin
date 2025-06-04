@@ -1,13 +1,29 @@
 extends layout
 
 block content
-  h1 #{title} 
-  p Bienvenido a Clinica Gontero.
-  p 
-    a(href="/pacientes/nuevo") Registrar Nuevo Paciente
-  p 
-    a(href="/pacientes") Ver Todos los Pacientes    
-  p 
-    a(href="/admisiones") Ver Todas las Admisiones
-  p 
-    a(href="/admisiones/nueva") Registrar Nueva Admisión
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-8
+        h1.text-center.mb-4 #{title}
+        p.text-center Bienvenido a Clinica Gontero.
+        .row.g-4
+          .col-md-6.col-lg-3
+            a(href="/pacientes/nuevo", class="card text-center menu-card mb-4 btn-violeta")
+              .card-body
+                i.fas.fa-user-plus.fa-2x.mb-2
+                h5.card-title Registrar Nuevo Paciente
+          .col-md-6.col-lg-3
+            a(href="/pacientes", class="card text-center menu-card mb-4 btn-violeta")
+              .card-body
+                i.fas.fa-users.fa-2x.mb-2
+                h5.card-title Ver Todos los Pacientes
+          .col-md-6.col-lg-3
+            a(href="/admisiones", class="card text-center menu-card mb-4 btn-violeta")
+              .card-body
+                i.fas.fa-notes-medical.fa-2x.mb-2
+                h5.card-title Ver Todas las Admisiones
+          .col-md-6.col-lg-3
+            a(href="/admisiones/nueva", class="card text-center menu-card mb-4 btn-violeta")
+              .card-body
+                i.fas.fa-plus-square.fa-2x.mb-2
+                h5.card-title Registrar Nueva Admisión
