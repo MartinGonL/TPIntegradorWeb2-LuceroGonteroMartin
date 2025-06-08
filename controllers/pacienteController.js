@@ -27,7 +27,7 @@ const PacienteController = {
 
         try {
             await Paciente.insertar(datosPaciente);
-
+            res.redirect('/pacientes');
         } catch (error) {
             console.error('Error al insertar el paciente:', error);
   
