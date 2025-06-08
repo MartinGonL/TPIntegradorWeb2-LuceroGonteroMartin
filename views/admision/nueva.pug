@@ -30,11 +30,20 @@ block content
 
     div.form-group.mt-3
       label(for="medico_referente") Médico Referente:
-      input(type="text" id="medico_referente" name="medico_referente" value=datosAdmision && datosAdmision.medico_referente ? datosAdmision.medico_referente : '' class="form-control")
-
+      select.form-control(name="medico_referente" id="medico_referente" required)
+        option(value="" selected disabled) Selecciona un médico
+        option(value="Dr. Juan Pérez") Dr. Juan Pérez
+        option(value="Dra. Ana Gómez") Dra. Ana Gómez
+        option(value="Dr. Carlos Ruiz") Dr. Carlos Ruiz
+        option(value="Dra. Laura Fernández") Dra. Laura Fernández
+        option(value="Dra. Orellano Mayra") Dra. Orellano Mayra
+        option(value="Dr. Martínez") Dr. Martínez
+        option(value="Dr. López") Dr. López 
+        option(value="Dr. García") Dr. García
+        option(value="Dr. Sánchez") Dr. Sánchez
     div.form-group.mt-3
       label(for="diagnostico_inicial") Diagnóstico Inicial:
       textarea#diagnostico_inicial.form-control(name="diagnostico_inicial" rows="3") #{datosAdmision && datosAdmision.diagnostico_inicial ? datosAdmision.diagnostico_inicial : ''}
 
     button(type="submit" class="btn btn-primary mt-3") Registrar Admisión 
-    a(href=`/pacientes/${paciente_id || (paciente ? paciente.id : '')}` class="btn btn-secondary mt-3 ml-2") Cancelar y Volver al Paciente 
+    a(href=`/pacientes/${paciente_id || (paciente ? paciente.id : '')}` class="btn btn-secondary mt-3 ml-2") Cancelar y Volver al Paciente

@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1.text-center #{title}
+  .d-flex.justify-content-center.mt-4
+    .card.shadow-lg(style="max-width: 420px; background: rgba(255,255,255,0.95); border: 2px solid #7c3aed;")
+      .card-body.text-center
+        i.fas.fa-user-md.fa-3x.mb-3(style="color:#7c3aed;")
+        h4 Presentación TPI-HIS de Lucero Gontero Martin
+        hr
+        p.mb-1
+          i.fas.fa-envelope(style="color:#4e058a; margin-right:8px;")
+          | Correo de contacto:
+        p.font-weight-bold(style="color:#4e058a; font-size:1.2rem; word-break:break-all;")
+          | martingontero@hotmail.com

@@ -1,4 +1,3 @@
-
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
@@ -26,6 +25,9 @@ app.get('/', (req, res) => {
     res.render('index', { title: 'Inicio - SIH' });
 });
 
+app.get('/contacto', (req, res) => {
+    res.render('contacto', { title: 'Contacto' });
+});
 
 app.use('/pacientes', pacienteRoutes);
 

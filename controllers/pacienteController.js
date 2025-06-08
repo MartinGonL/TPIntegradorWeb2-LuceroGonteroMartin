@@ -7,15 +7,34 @@ const PacienteController = {
         const { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
         const datosPaciente = { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
 
+        const provinciasValidas = [
+            "Buenos Aires","Catamarca","Chaco","Chubut","Córdoba","Corrientes","Entre Ríos","Formosa","Jujuy","La Pampa","La Rioja","Mendoza","Misiones","Neuquén","Río Negro","Salta","San Juan","San Luis","Santa Cruz","Santa Fe","Santiago del Estero","Tierra del Fuego","Tucumán"
+        ];
 
         const errores = [];
-        if (!nombre) errores.push({ msg: 'El campo Nombre es obligatorio.' });
-        if (!apellido) errores.push({ msg: 'El campo Apellido es obligatorio.' });
-        if (!dni) errores.push({ msg: 'El campo DNI es obligatorio.' });
-        if (!fechaNacimiento) errores.push({ msg: 'El campo Fecha de Nacimiento es obligatorio.' });
-        if (!telefono) errores.push({ msg: 'El campo Teléfono es obligatorio.' });
-        if (!email) errores.push({ msg: 'El campo Email es obligatorio.' });
+        if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
+            errores.push({ msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
 
+        if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
+            errores.push({ msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+
+        if (!dni || !/^\d{7,8}$/.test(dni))
+            errores.push({ msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+
+        if (!fechaNacimiento || isNaN(Date.parse(fechaNacimiento)) || new Date(fechaNacimiento) >= new Date())
+            errores.push({ msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
+
+        if (!telefono || !/^\d{8,}$/.test(telefono))
+            errores.push({ msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            errores.push({ msg: 'Ingrese un email válido.' });
+
+        if (cp && !/^\d{4,5}$/.test(cp))
+            errores.push({ msg: 'El Código Postal debe tener 4 o 5 números.' });
+
+        if (!provincia || !provinciasValidas.includes(provincia))
+            errores.push({ msg: 'Seleccione una provincia válida.' });
 
         if (errores.length > 0) {
             return res.status(400).render('paciente/nuevo', {
@@ -45,15 +64,34 @@ const PacienteController = {
         const { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
         const datosPacienteForm = { id, nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
 
+        const provinciasValidas = [
+            "Buenos Aires","Catamarca","Chaco","Chubut","Córdoba","Corrientes","Entre Ríos","Formosa","Jujuy","La Pampa","La Rioja","Mendoza","Misiones","Neuquén","Río Negro","Salta","San Juan","San Luis","Santa Cruz","Santa Fe","Santiago del Estero","Tierra del Fuego","Tucumán"
+        ];
 
         const errores = [];
-        if (!nombre) errores.push({ msg: 'El campo Nombre es obligatorio.' });
-        if (!apellido) errores.push({ msg: 'El campo Apellido es obligatorio.' });
-        if (!dni) errores.push({ msg: 'El campo DNI es obligatorio.' });
-        if (!fechaNacimiento) errores.push({ msg: 'El campo Fecha de Nacimiento es obligatorio.' });
-        if (!telefono) errores.push({ msg: 'El campo Teléfono es obligatorio.' });
-        if (!email) errores.push({ msg: 'El campo Email es obligatorio.' });
-       
+        if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
+            errores.push({ msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
+
+        if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
+            errores.push({ msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+
+        if (!dni || !/^\d{7,8}$/.test(dni))
+            errores.push({ msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+
+        if (!fechaNacimiento || isNaN(Date.parse(fechaNacimiento)) || new Date(fechaNacimiento) >= new Date())
+            errores.push({ msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
+
+        if (!telefono || !/^\d{8,}$/.test(telefono))
+            errores.push({ msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            errores.push({ msg: 'Ingrese un email válido.' });
+
+        if (cp && !/^\d{4,5}$/.test(cp))
+            errores.push({ msg: 'El Código Postal debe tener 4 o 5 números.' });
+
+        if (!provincia || !provinciasValidas.includes(provincia))
+            errores.push({ msg: 'Seleccione una provincia válida.' });
 
         if (errores.length > 0) {
 

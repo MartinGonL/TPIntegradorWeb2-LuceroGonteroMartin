@@ -37,24 +37,54 @@ const AdmisionController = {
     async registrarAdmision(req, res, next) {
         const { paciente_id, tipo_admision, medico_referente, diagnostico_inicial } = req.body;
         const datosAdmision = { paciente_id, tipo_admision, medico_referente, diagnostico_inicial };
+
+        // Lista de médicos válidos (debe coincidir con el select del formulario)
+        const MEDICOS_VALIDOS = [
+            "Dr. Juan Pérez",
+            "Dra. Ana Gómez",
+            "Dr. Carlos Ruiz",
+            "Dra. Laura Fernández",
+            "Dra. Orellano Mayra",
+            "Dr. Martínez",
+            "Dr. López",
+            "Dr. García",
+            "Dr. Sánchez"
+        ];
+
+        // Tipos de admisión válidos (debe coincidir con el select del formulario)
+        const TIPOS_ADMISION_VALIDOS = [
+            "Programada",
+            "Derivación Médica",
+            "Emergencia"
+        ];
+
         const errores = [];
-        if (!paciente_id) errores.push({ msg: 'El ID del paciente es obligatorio.' }); 
-        if (!tipo_admision) errores.push({ msg: 'El campo Tipo de Admisión es obligatorio.' });
+        if (!paciente_id || isNaN(Number(paciente_id)) || Number(paciente_id) <= 0)
+            errores.push({ msg: 'El ID del paciente es obligatorio y debe ser un número válido.' });
+
+        if (!tipo_admision || !TIPOS_ADMISION_VALIDOS.includes(tipo_admision))
+            errores.push({ msg: 'El campo Tipo de Admisión es obligatorio y debe ser válido.' });
+
+        if (!medico_referente || !MEDICOS_VALIDOS.includes(medico_referente))
+            errores.push({ msg: 'Seleccione un médico referente válido.' });
+
+        if (!diagnostico_inicial || diagnostico_inicial.trim().length < 5)
+            errores.push({ msg: 'El Diagnóstico Inicial es obligatorio y debe tener al menos 5 caracteres.' });
 
         if (errores.length > 0) {
             try {
                 const paciente = await Paciente.buscarPorId(paciente_id);
                 if (!paciente && paciente_id) { 
-                     errores.push({msg: 'Paciente especificado para la admisión no fue encontrado.'});
+                    errores.push({msg: 'Paciente especificado para la admisión no fue encontrado.'});
                 }
                 return res.status(400).render('admision/nueva', {
                     title: `Nueva Admisión para ${paciente ? paciente.nombre + ' ' + paciente.apellido : 'Paciente Desconocido'}`,
-                    errors: errores, 
-                    paciente: paciente, 
-                    paciente_id: paciente_id, 
-                    datosAdmision: datosAdmision 
+                    errors: errores,
+                    paciente: paciente,
+                    paciente_id: paciente_id,
+                    datosAdmision: datosAdmision
                 });
-            } catch (errorAlObtener) { 
+            } catch (errorAlObtener) {
                 console.error('Error al obtener datos del paciente durante la falla de validación de admisión:', errorAlObtener);
                 return next(errorAlObtener);
             }
@@ -62,11 +92,9 @@ const AdmisionController = {
 
         try {
             const idNuevaAdmision = await Admision.crear(datosAdmision);
-
             res.redirect(`/admisiones/${idNuevaAdmision}`);
         } catch (error) {
             console.error('Error al registrar la admisión:', error);
-
             try {
                 const paciente = await Paciente.buscarPorId(paciente_id);
                 res.status(500).render('admision/nueva', {
@@ -77,8 +105,8 @@ const AdmisionController = {
                     datosAdmision: datosAdmision
                 });
             } catch (errorAlObtener) {
-                 console.error('Error al obtener datos del paciente después de un error de creación de admisión:', errorAlObtener);
-                 next(errorAlObtener); 
+                console.error('Error al obtener datos del paciente después de un error de creación de admisión:', errorAlObtener);
+                next(errorAlObtener);
             }
         }
     },
