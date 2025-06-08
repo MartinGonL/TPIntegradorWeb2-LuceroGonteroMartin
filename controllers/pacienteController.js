@@ -13,35 +13,40 @@ const PacienteController = {
 
         const errores = [];
         if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
-            errores.push({ msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
+         errores.push({ param: 'nombre', msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
 
         if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
-            errores.push({ msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+         errores.push({ param: 'apellido', msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
 
         if (!dni || !/^\d{7,8}$/.test(dni))
-            errores.push({ msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+         errores.push({ param: 'dni', msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
 
         if (!fechaNacimiento || isNaN(Date.parse(fechaNacimiento)) || new Date(fechaNacimiento) >= new Date())
-            errores.push({ msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
+         errores.push({ param: 'fechaNacimiento', msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
 
         if (!telefono || !/^\d{8,}$/.test(telefono))
-            errores.push({ msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
+         errores.push({ param: 'telefono', msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-            errores.push({ msg: 'Ingrese un email válido.' });
+         errores.push({ param: 'email', msg: 'Ingrese un email válido.' });
 
         if (cp && !/^\d{4,5}$/.test(cp))
-            errores.push({ msg: 'El Código Postal debe tener 4 o 5 números.' });
+         errores.push({ param: 'cp', msg: 'El Código Postal debe tener 4 o 5 números.' });
 
         if (!provincia || !provinciasValidas.includes(provincia))
-            errores.push({ msg: 'Seleccione una provincia válida.' });
+         errores.push({ param: 'provincia', msg: 'Seleccione una provincia válida.' });
 
-        if (errores.length > 0) {
-            return res.status(400).render('paciente/nuevo', {
-                title: 'Registrar Nuevo Paciente', 
-                errors: errores, 
-                pacienteData: datosPaciente 
-            });
+        if (errores.length > 0) {    
+        const erroresObj = errores.reduce((obj, error) => {
+        obj[error.param] = error;
+        return obj;
+        }, {});
+
+        return res.status(400).render('paciente/nuevo', {
+        title: 'Registrar Nuevo Paciente',
+        errors: erroresObj, 
+        paciente: datosPaciente
+        });
         }
 
         try {
