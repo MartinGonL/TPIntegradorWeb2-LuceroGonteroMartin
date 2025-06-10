@@ -31,24 +31,17 @@ app.get('/contacto', (req, res) => {
 
 app.use('/pacientes', pacienteRoutes);
 
-
 app.use('/admisiones', admisionRoutes);
-
 
 app.use('/alas', alaRoutes);
 
-
 app.use('/habitaciones', habitacionRoutes);
-
 
 app.use('/camas', camaRoutes);
 
-
 app.use('/asignaciones-cama', asignacionCamaRoutes);
 
-
 app.use('/evaluaciones-enfermeria', evaluacionEnfermeriaRoutes);
-
 
 app.use('/evaluaciones-medicas', evaluacionMedicaRoutes);
 

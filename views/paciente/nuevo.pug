@@ -89,5 +89,29 @@ block content
           input.form-control(type="text" id="cp" name="cp" value=(paciente ? paciente.cp : '') class=(errors && errors.cp ? 'is-invalid' : ''))
           if errors && errors.cp
             .invalid-feedback= errors.cp.msg
+      button#generarAutomatico.btn.btn-secondary(type="button") Generar Paciente Automático
 
       button(type="submit" class="btn btn-primary mt-3 btn-block") Registrar Paciente
+
+  script.
+    document.getElementById('generarAutomatico').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/pacientes/generar-automatico', { method: 'POST' });
+        const paciente = await response.json();
+
+        document.getElementById('nombre').value = paciente.nombre;
+        document.getElementById('apellido').value = paciente.apellido;
+        document.getElementById('dni').value = paciente.dni;
+        document.getElementById('fechaNacimiento').value = paciente.fechaNacimiento;
+        document.getElementById('telefono').value = paciente.telefono;
+        document.getElementById('email').value = paciente.email;
+        document.getElementById('domicilio').value = paciente.domicilio;
+        document.getElementById('localidad').value = paciente.localidad;
+        document.getElementById('provincia').value = paciente.provincia;
+        document.getElementById('cp').value = paciente.cp;
+
+        alert("Datos automáticos cargados");
+      } catch (error) {
+        alert("Error al generar el paciente");
+      }
+    });
