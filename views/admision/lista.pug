@@ -32,9 +32,6 @@ block content
               td
                 div.d-flex.flex-column.align-items-start
                   a(href=`/admisiones/${admision.id}` class="btn btn-info btn-sm mb-1") Ver Detalles
-                  if admision.estado_admision === 'Activa'
-                    form(method="POST" action=`/admisiones/${admision.id}/actualizar-estado` style="display:inline;")
-                      input(type="hidden" name="nuevo_estado" value="Completada")
-                      button(type="submit" class="btn btn-success btn-sm mt-1" onclick="return confirm('¿Marcar esta admisión como Completada?');") Completar
+                  
   else
     p.mt-3 No se encontraron admisiones en el sistema.
