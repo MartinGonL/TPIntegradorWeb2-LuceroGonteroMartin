@@ -16,6 +16,13 @@ block content
         input(type="text" id="apellido" name="apellido" value=paciente.apellido required class="form-control")
 
       div.form-group
+        label(for="sexo") Sexo:
+        select(id="sexo" name="sexo" required class="form-control")
+          option(value="Masculino" selected=(paciente.sexo === 'Masculino')) Masculino
+          option(value="Femenino" selected=(paciente.sexo === 'Femenino')) Femenino
+          option(value="Otro" selected=(paciente.sexo === 'Otro')) Otro
+
+      div.form-group
         label(for="dni") DNI:
         input(type="text" id="dni" name="dni" value=paciente.dni required class="form-control")
 

@@ -20,6 +20,16 @@ block content
 
       .form-row
         .form-group.col-md-6
+          label(for="sexo") Sexo:
+          select.form-control(id="sexo" name="sexo" required class=(errors && errors.sexo ? 'is-invalid' : ''))
+            option(value="" selected=(!paciente || !paciente.sexo) disabled) Selecciona el sexo
+            option(value="Masculino" selected=(paciente && paciente.sexo === 'Masculino')) Masculino
+            option(value="Femenino" selected=(paciente && paciente.sexo === 'Femenino')) Femenino
+            option(value="Otro" selected=(paciente && paciente.sexo === 'Otro')) Otro
+          if errors && errors.sexo
+            .invalid-feedback= errors.sexo.msg
+
+        .form-group.col-md-6
           label(for="dni") DNI:
           input.form-control(type="text" id="dni" name="dni" required value=(paciente ? paciente.dni : '') class=(errors && errors.dni ? 'is-invalid' : ''))
           if errors && errors.dni
@@ -101,6 +111,7 @@ block content
 
         document.getElementById('nombre').value = paciente.nombre;
         document.getElementById('apellido').value = paciente.apellido;
+        document.getElementById('sexo').value = paciente.sexo;
         document.getElementById('dni').value = paciente.dni;
         document.getElementById('fechaNacimiento').value = paciente.fechaNacimiento;
         document.getElementById('telefono').value = paciente.telefono;

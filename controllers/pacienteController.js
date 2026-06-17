@@ -4,12 +4,14 @@ const Admision = require('../models/admisionModel.js');
 const PacienteController = {
 
     async insertar(req, res, next) { 
-        const { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
-        const datosPaciente = { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
+        const { nombre, apellido, sexo, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
+        const datosPaciente = { nombre, apellido, sexo, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
 
         const provinciasValidas = [
             "Buenos Aires","Catamarca","Chaco","Chubut","Córdoba","Corrientes","Entre Ríos","Formosa","Jujuy","La Pampa","La Rioja","Mendoza","Misiones","Neuquén","Río Negro","Salta","San Juan","San Luis","Santa Cruz","Santa Fe","Santiago del Estero","Tierra del Fuego","Tucumán"
         ];
+
+        const sexosValidos = ["Masculino", "Femenino", "Otro"];
 
         const errores = [];
         if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
@@ -17,6 +19,9 @@ const PacienteController = {
 
         if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
          errores.push({ param: 'apellido', msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+
+        if (!sexo || !sexosValidos.includes(sexo))
+         errores.push({ param: 'sexo', msg: 'Seleccione un sexo válido.' });
 
         if (!dni || !/^\d{7,8}$/.test(dni))
          errores.push({ param: 'dni', msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
@@ -66,12 +71,14 @@ const PacienteController = {
 
     async actualizarPaciente(req, res, next) {
         const { id } = req.params;
-        const { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
-        const datosPacienteForm = { id, nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
+        const { nombre, apellido, sexo, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp } = req.body;
+        const datosPacienteForm = { id, nombre, apellido, sexo, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
 
         const provinciasValidas = [
             "Buenos Aires","Catamarca","Chaco","Chubut","Córdoba","Corrientes","Entre Ríos","Formosa","Jujuy","La Pampa","La Rioja","Mendoza","Misiones","Neuquén","Río Negro","Salta","San Juan","San Luis","Santa Cruz","Santa Fe","Santiago del Estero","Tierra del Fuego","Tucumán"
         ];
+
+        const sexosValidos = ["Masculino", "Femenino", "Otro"];
 
         const errores = [];
         if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
@@ -79,6 +86,9 @@ const PacienteController = {
 
         if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
             errores.push({ msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+
+        if (!sexo || !sexosValidos.includes(sexo))
+            errores.push({ msg: 'Seleccione un sexo válido.' });
 
         if (!dni || !/^\d{7,8}$/.test(dni))
             errores.push({ msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
@@ -108,7 +118,7 @@ const PacienteController = {
         }
 
 
-        const datosParaActualizar = { nombre, apellido, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
+        const datosParaActualizar = { nombre, apellido, sexo, dni, fechaNacimiento, telefono, email, domicilio, localidad, provincia, cp };
 
         try {
             const filasAfectadas = await Paciente.actualizar(id, datosParaActualizar);
@@ -224,6 +234,7 @@ async generarPacienteAutomatico(req, res, next) {
         const datosAutomaticos = {
             nombre: "Paciente",
             apellido: "Automático",
+            sexo: "Masculino",
             dni: dni, 
             fechaNacimiento: "1990-01-01",
             telefono: "123456789",

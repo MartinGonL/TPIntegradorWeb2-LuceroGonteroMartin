@@ -24,6 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `nombre_usuario` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rol` enum('Admin','Medico','Enfermero') NOT NULL,
+  `nombre_completo` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nombre_usuario`, `password`, `rol`, `nombre_completo`) VALUES
+(1, 'admin', 'admin123', 'Admin', 'Administrador del Sistema'),
+(2, 'medico1', 'medico123', 'Medico', 'Dr. Juan Pérez'),
+(3, 'enfermero1', 'enfermero123', 'Enfermero', 'Enfermero Pedro');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `admisiones`
 --
 
@@ -85,8 +108,32 @@ CREATE TABLE `camas` (
 CREATE TABLE `evaluaciones_enfermeria` (
   `id` int(11) NOT NULL,
   `admision_id` int(11) NOT NULL,
+  `enfermero_id` varchar(50) DEFAULT NULL,
   `fecha` datetime NOT NULL DEFAULT current_timestamp(),
-  `observaciones` text DEFAULT NULL
+  `motivo_internacion_actual` text DEFAULT NULL,
+  `antecedentes_personales` text DEFAULT NULL,
+  `antecedentes_familiares` text DEFAULT NULL,
+  `historial_medico_previo` text DEFAULT NULL,
+  `alergias` text DEFAULT NULL,
+  `medicacion_actual` text DEFAULT NULL,
+  `evaluacion_fisica` text DEFAULT NULL,
+  `signos_vitales_ta` varchar(20) DEFAULT NULL,
+  `signos_vitales_fc` int(11) DEFAULT NULL,
+  `signos_vitales_fr` int(11) DEFAULT NULL,
+  `signos_vitales_temp` decimal(4,2) DEFAULT NULL,
+  `signos_vitales_sato2` int(11) DEFAULT NULL,
+  `nivel_conciencia` varchar(100) DEFAULT NULL,
+  `estado_piel_mucosas` text DEFAULT NULL,
+  `movilidad` varchar(100) DEFAULT NULL,
+  `necesidades_basicas_alimentacion` text DEFAULT NULL,
+  `necesidades_basicas_higiene` text DEFAULT NULL,
+  `necesidades_basicas_eliminacion` text DEFAULT NULL,
+  `necesidades_basicas_descanso_sueno` text DEFAULT NULL,
+  `valoracion_dolor_escala` varchar(50) DEFAULT NULL,
+  `valoracion_dolor_localizacion` varchar(100) DEFAULT NULL,
+  `valoracion_dolor_caracteristicas` text DEFAULT NULL,
+  `observaciones_adicionales` text DEFAULT NULL,
+  `plan_cuidados_inicial` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -127,6 +174,7 @@ CREATE TABLE `pacientes` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
+  `sexo` enum('Masculino','Femenino','Otro') NOT NULL,
   `dni` varchar(20) NOT NULL,
   `fechaNacimiento` date NOT NULL,
   `telefono` varchar(50) DEFAULT NULL,
@@ -141,11 +189,11 @@ CREATE TABLE `pacientes` (
 -- Volcado de datos para la tabla `pacientes`
 --
 
-INSERT INTO `pacientes` (`id`, `nombre`, `apellido`, `dni`, `fechaNacimiento`, `telefono`, `email`, `domicilio`, `localidad`, `provincia`, `cp`) VALUES
-(1, 'Martin', 'Gontero Luter', '38419062', '1995-02-09', '2664653015', 'skrapykoko38@gmail.com', 'lic 22 mzn 1 casa 4', 'La Punta', 'San Luis', '5710'),
-(5, 'Martin', 'pocho la pantera', '34877616', '1875-01-09', '2664504050', 'skrapykoko3@gmail.com', 'lic 22 mzn 1 casa 87', 'La Punta', 'San Luis', '5710'),
-(6, 'mayra dafne', 'gatica', '34877615', '1990-02-07', '2664606060', 'mayragd@hotmail.com.ar', 'lic 22 mzn 1 casa 8', 'villa de la quebrada', 'San Luis', '5710'),
-(8, 'emilia', 'lucero', '54162571', '2015-08-15', '2664404040', 'martingontero@hotmail.com', 'lic 22 mzn 1 casa 4', 'La Punta', 'San Luis', '5710');
+INSERT INTO `pacientes` (`id`, `nombre`, `apellido`, `sexo`, `dni`, `fechaNacimiento`, `telefono`, `email`, `domicilio`, `localidad`, `provincia`, `cp`) VALUES
+(1, 'Martin', 'Gontero Luter', 'Masculino', '38419062', '1995-02-09', '2664653015', 'skrapykoko38@gmail.com', 'lic 22 mzn 1 casa 4', 'La Punta', 'San Luis', '5710'),
+(5, 'Martin', 'pocho la pantera', 'Masculino', '34877616', '1875-01-09', '2664504050', 'skrapykoko3@gmail.com', 'lic 22 mzn 1 casa 87', 'La Punta', 'San Luis', '5710'),
+(6, 'mayra dafne', 'gatica', 'Femenino', '34877615', '1990-02-07', '2664606060', 'mayragd@hotmail.com.ar', 'lic 22 mzn 1 casa 8', 'villa de la quebrada', 'San Luis', '5710'),
+(8, 'emilia', 'lucero', 'Femenino', '54162571', '2015-08-15', '2664404040', 'martingontero@hotmail.com', 'lic 22 mzn 1 casa 4', 'La Punta', 'San Luis', '5710');
 
 --
 -- Índices para tablas volcadas

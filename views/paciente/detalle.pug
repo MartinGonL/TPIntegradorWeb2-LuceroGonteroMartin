@@ -16,6 +16,9 @@ block content
           
           dt.col-sm-3 Apellido
           dd.col-sm-9= paciente.apellido
+
+          dt.col-sm-3 Sexo
+          dd.col-sm-9= paciente.sexo
           
           dt.col-sm-3 Fecha de Nacimiento
           dd.col-sm-9= paciente.fechaNacimiento ? new Date(paciente.fechaNacimiento).toLocaleDateString() : 'N/A'
