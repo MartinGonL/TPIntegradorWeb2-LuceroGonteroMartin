@@ -15,8 +15,10 @@ html(lang="es")
       nav
         ul
           li: a(href="/") Inicio
-
           li: a(href="/contacto") Contacto
+          if usuario
+            li(style="color: #e2c3ff; font-weight: bold;") #{usuario.nombre_completo} (#{usuario.rol})
+            li: a(href="/auth/logout") Cerrar Sesión
 
     main
       block content 

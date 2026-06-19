@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
+const session = require('express-session');
+const authRoute = require('./routes/authRoute'); // Requerir rutas de autenticación
 const pacienteRoutes = require('./routes/pacienteRoute'); // Requerir rutas de pacientes
 const admisionRoutes = require('./routes/admisionRoute'); // Requerir rutas de admisiones
 const alaRoutes = require('./routes/alaRoute');           // Requerir rutas de alas
@@ -9,6 +11,7 @@ const camaRoutes = require('./routes/camaRoute');             // Requerir rutas 
 const asignacionCamaRoutes = require('./routes/asignacionCamaRoute.js'); // Requerir rutas de asignación de camas
 const evaluacionEnfermeriaRoutes = require('./routes/evaluacionEnfermeriaRoute.js'); // Requerir rutas de evaluación de enfermería
 const evaluacionMedicaRoutes = require('./routes/evaluacionMedicaRoute.js');     // Requerir rutas de evaluación médica
+const { requerirLogin, permitirRoles } = require('./middlewares/authMiddleware'); // Requerir middlewares de protección
 
 dotenv.config();
 const app = express();
@@ -21,6 +24,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.static(path.join(__dirname, 'public'))); 
 
+// Configurar el uso de sesiones
+app.use(session({
+    secret: 'secreto_clinica',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Middleware para pasar los datos de la sesión a las vistas Pug
+app.use((req, res, next) => {
+    res.locals.usuario = req.session.usuario || null;
+    next();
+});
+
+// Rutas de autenticación (públicas)
+app.use('/auth', authRoute);
+
+// Proteger todas las rutas siguientes con login obligatorio
+app.use(requerirLogin);
+
 app.get('/', (req, res) => {
     res.render('index', { title: 'Inicio - SIH' });
 });
@@ -29,27 +51,19 @@ app.get('/contacto', (req, res) => {
     res.render('contacto', { title: 'Contacto' });
 });
 
-app.use('/pacientes', pacienteRoutes);
-
-app.use('/admisiones', admisionRoutes);
-
-app.use('/alas', alaRoutes);
-
-app.use('/habitaciones', habitacionRoutes);
-
-app.use('/camas', camaRoutes);
-
-app.use('/asignaciones-cama', asignacionCamaRoutes);
-
-app.use('/evaluaciones-enfermeria', evaluacionEnfermeriaRoutes);
-
-app.use('/evaluaciones-medicas', evaluacionMedicaRoutes);
-
+// Rutas protegidas según los roles de usuario
+app.use('/pacientes', permitirRoles(['Admin', 'Medico', 'Enfermero']), pacienteRoutes);
+app.use('/admisiones', permitirRoles(['Admin', 'Medico', 'Enfermero']), admisionRoutes);
+app.use('/alas', permitirRoles(['Admin']), alaRoutes);
+app.use('/habitaciones', permitirRoles(['Admin']), habitacionRoutes);
+app.use('/camas', permitirRoles(['Admin']), camaRoutes);
+app.use('/asignaciones-cama', permitirRoles(['Admin']), asignacionCamaRoutes);
+app.use('/evaluaciones-enfermeria', permitirRoles(['Admin', 'Enfermero']), evaluacionEnfermeriaRoutes);
+app.use('/evaluaciones-medicas', permitirRoles(['Admin', 'Medico']), evaluacionMedicaRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('404', { title: 'Página No Encontrada' }); 
 });
-
 
 app.use((err, req, res, next) => {
     console.error(err.stack); 
@@ -60,7 +74,6 @@ app.use((err, req, res, next) => {
         error: process.env.NODE_ENV === 'development' ? err : {}
     });
 });
-
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`); 

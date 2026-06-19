@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-5
+        .card.shadow
+          .card-header.bg-primary.text-white
+            h4.text-center.mb-0 Iniciar Sesión
+          .card-body
+            if errors
+              .alert.alert-danger
+                each error in errors
+                  p.mb-0= error.msg
+            form(method="POST" action="/auth/login")
+              .form-group
+                label(for="nombre_usuario") Nombre de Usuario:
+                input.form-control(type="text" id="nombre_usuario" name="nombre_usuario" required value=(nombre_usuario || ''))
+              .form-group
+                label(for="password") Contraseña:
+                input.form-control(type="password" id="password" name="password" required)
+              button.btn.btn-primary.btn-block(type="submit") Ingresar
