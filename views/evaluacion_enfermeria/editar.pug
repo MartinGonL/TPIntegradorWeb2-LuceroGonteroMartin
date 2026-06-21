@@ -18,10 +18,16 @@ block content
           div.card-body
             p.card-text #[strong Nombre:] #{paciente.nombre} #{paciente.apellido} 
             p.card-text #[strong DNI:] #{paciente.dni}
-  else
-    p.alert.alert-warning Información de contexto (Admisión/Paciente) no disponible. 
+  if evaluacionMedica
+    div.card.mt-3.mb-3
+      div.card-header Evaluación Médica Vinculada 
+      div.card-body
+        p.card-text #[strong ID Evaluación Médica:] #{evaluacionMedica.id} 
+        p.card-text #[strong Fecha Evaluación Médica:] #{evaluacionMedica.fecha_evaluacion ? new Date(evaluacionMedica.fecha_evaluacion).toLocaleString() : 'N/A'} 
+        p.card-text
+          a.btn.btn-violeta.btn-sm.mr-2(href=`/evaluaciones-medicas/${evaluacionMedica.id}`) Ver Detalle de Evaluación Médica 
+          a.btn.btn-violeta.btn-sm(href=`/evaluaciones-medicas/${evaluacionMedica.id}/editar`) Editar Evaluación Médica 
 
-  
   if errors && errors.length > 0
     div.alert.alert-danger.mt-3
       h4 Errores: 

@@ -84,6 +84,16 @@ CREATE TABLE `alas` (
   `descripcion` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `alas`
+--
+
+INSERT INTO `alas` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'Ala Norte', 'Internación General - Cuidados Básicos'),
+(2, 'Ala Sur', 'Cuidados Críticos y Especialidades'),
+(3, 'Ala Este', 'Pediatría y Maternidad'),
+(4, 'Ala Oeste', 'Unidad de Cuidados Intermedios');
+
 -- --------------------------------------------------------
 
 --
@@ -98,6 +108,36 @@ CREATE TABLE `camas` (
   `paciente_actual_id` int(11) DEFAULT NULL,
   `admision_actual_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `camas`
+--
+
+INSERT INTO `camas` (`id`, `habitacion_id`, `codigo_cama`, `estado_cama`, `paciente_actual_id`, `admision_actual_id`) VALUES
+(1, 1, 'Cama-N-101-A', 'Libre', NULL, NULL),
+(2, 1, 'Cama-N-101-B', 'Libre', NULL, NULL),
+(3, 2, 'Cama-N-102-A', 'Libre', NULL, NULL),
+(4, 2, 'Cama-N-102-B', 'Libre', NULL, NULL),
+(5, 3, 'Cama-N-103', 'Libre', NULL, NULL),
+(6, 4, 'Cama-N-104', 'Libre', NULL, NULL),
+(7, 5, 'Cama-S-101-A', 'Libre', NULL, NULL),
+(8, 5, 'Cama-S-101-B', 'Libre', NULL, NULL),
+(9, 6, 'Cama-S-102-A', 'Libre', NULL, NULL),
+(10, 6, 'Cama-S-102-B', 'Libre', NULL, NULL),
+(11, 7, 'Cama-S-103', 'Libre', NULL, NULL),
+(12, 8, 'Cama-S-104', 'Libre', NULL, NULL),
+(13, 9, 'Cama-E-101-A', 'Libre', NULL, NULL),
+(14, 9, 'Cama-E-101-B', 'Libre', NULL, NULL),
+(15, 10, 'Cama-E-102-A', 'Libre', NULL, NULL),
+(16, 10, 'Cama-E-102-B', 'Libre', NULL, NULL),
+(17, 11, 'Cama-E-103', 'Libre', NULL, NULL),
+(18, 12, 'Cama-E-104', 'Libre', NULL, NULL),
+(19, 13, 'Cama-O-101-A', 'Libre', NULL, NULL),
+(20, 13, 'Cama-O-101-B', 'Libre', NULL, NULL),
+(21, 14, 'Cama-O-102-A', 'Libre', NULL, NULL),
+(22, 14, 'Cama-O-102-B', 'Libre', NULL, NULL),
+(23, 15, 'Cama-O-103', 'Libre', NULL, NULL),
+(24, 16, 'Cama-O-104', 'Libre', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,7 +186,20 @@ CREATE TABLE `evaluaciones_medicas` (
   `id` int(11) NOT NULL,
   `admision_id` int(11) NOT NULL,
   `fecha_evaluacion` datetime NOT NULL DEFAULT current_timestamp(),
-  `observaciones` text DEFAULT NULL
+  `observaciones` text DEFAULT NULL,
+  `medico_id` varchar(50) DEFAULT NULL,
+  `evaluacion_enfermeria_id` int(11) DEFAULT NULL,
+  `diagnostico_principal` text DEFAULT NULL,
+  `diagnosticos_secundarios` text DEFAULT NULL,
+  `plan_tratamiento_inicial` text DEFAULT NULL,
+  `tratamiento_farmacologico` text DEFAULT NULL,
+  `tratamiento_no_farmacologico` text DEFAULT NULL,
+  `procedimientos_medicos` text DEFAULT NULL,
+  `interconsultas_solicitadas` text DEFAULT NULL,
+  `solicitud_pruebas_diagnosticas` text DEFAULT NULL,
+  `observaciones_evolucion` text DEFAULT NULL,
+  `recomendaciones_alta_seguimiento` text DEFAULT NULL,
+  `notas_medicas_adicionales` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -163,6 +216,28 @@ CREATE TABLE `habitaciones` (
   `capacidad` int(11) NOT NULL DEFAULT 1,
   `descripcion` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `habitaciones`
+--
+
+INSERT INTO `habitaciones` (`id`, `ala_id`, `numero_habitacion`, `tipo`, `capacidad`, `descripcion`) VALUES
+(1, 1, 'N-101', 'Compartida', 2, 'Habitación compartida en Ala Norte'),
+(2, 1, 'N-102', 'Compartida', 2, 'Habitación compartida en Ala Norte'),
+(3, 1, 'N-103', 'Individual', 1, 'Habitación individual en Ala Norte'),
+(4, 1, 'N-104', 'Individual', 1, 'Habitación individual en Ala Norte'),
+(5, 2, 'S-101', 'Compartida', 2, 'Habitación compartida en Ala Sur'),
+(6, 2, 'S-102', 'Compartida', 2, 'Habitación compartida en Ala Sur'),
+(7, 2, 'S-103', 'Individual', 1, 'Habitación individual en Ala Sur'),
+(8, 2, 'S-104', 'Individual', 1, 'Habitación individual en Ala Sur'),
+(9, 3, 'E-101', 'Compartida', 2, 'Habitación compartida en Ala Este'),
+(10, 3, 'E-102', 'Compartida', 2, 'Habitación compartida en Ala Este'),
+(11, 3, 'E-103', 'Individual', 1, 'Habitación individual en Ala Este'),
+(12, 3, 'E-104', 'Individual', 1, 'Habitación individual en Ala Este'),
+(13, 4, 'O-101', 'Compartida', 2, 'Habitación compartida en Ala Oeste'),
+(14, 4, 'O-102', 'Compartida', 2, 'Habitación compartida en Ala Oeste'),
+(15, 4, 'O-103', 'Individual', 1, 'Habitación individual en Ala Oeste'),
+(16, 4, 'O-104', 'Individual', 1, 'Habitación individual en Ala Oeste');
 
 -- --------------------------------------------------------
 
@@ -266,13 +341,13 @@ ALTER TABLE `admisiones`
 -- AUTO_INCREMENT de la tabla `alas`
 --
 ALTER TABLE `alas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `camas`
 --
 ALTER TABLE `camas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `evaluaciones_enfermeria`
@@ -290,7 +365,7 @@ ALTER TABLE `evaluaciones_medicas`
 -- AUTO_INCREMENT de la tabla `habitaciones`
 --
 ALTER TABLE `habitaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `pacientes`
@@ -327,7 +402,8 @@ ALTER TABLE `evaluaciones_enfermeria`
 -- Filtros para la tabla `evaluaciones_medicas`
 --
 ALTER TABLE `evaluaciones_medicas`
-  ADD CONSTRAINT `evaluaciones_medicas_ibfk_1` FOREIGN KEY (`admision_id`) REFERENCES `admisiones` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `evaluaciones_medicas_ibfk_1` FOREIGN KEY (`admision_id`) REFERENCES `admisiones` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_evaluacion_medica_enfermeria` FOREIGN KEY (`evaluacion_enfermeria_id`) REFERENCES `evaluaciones_enfermeria` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `habitaciones`

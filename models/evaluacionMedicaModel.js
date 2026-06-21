@@ -42,6 +42,20 @@ const EvaluacionMedica = {
         } finally {
             if (conexion) conexion.release();
         }
+    },
+
+    actualizar: async (id, datos) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [resultado] = await conexion.query("UPDATE evaluaciones_medicas SET ? WHERE id = ?", [datos, id]);
+            return resultado.affectedRows;
+        } catch (error) {
+            console.error('Error en EvaluacionMedica.actualizar:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
     }
 };
 

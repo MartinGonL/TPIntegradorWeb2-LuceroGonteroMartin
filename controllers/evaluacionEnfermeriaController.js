@@ -1,4 +1,5 @@
 const EvaluacionEnfermeria = require('../models/evaluacionEnfermeriaModel');
+const EvaluacionMedica = require('../models/evaluacionMedicaModel');
 const Admision = require('../models/admisionModel');
 const Paciente = require('../models/pacienteModel');
 
@@ -13,13 +14,23 @@ const EvaluacionEnfermeriaController = {
                 err.status = 404;
                 return next(err);
             }
+
+            // Si ya existe una evaluación de enfermería asignada a la admisión, redirigir a su detalle
+            const evaluacionExistente = await EvaluacionEnfermeria.obtenerPorIdAdmision(admisionId);
+            if (evaluacionExistente) {
+                return res.redirect(`/evaluaciones-enfermeria/${evaluacionExistente.id}`);
+            }
+
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
+            const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admisionId);
+            const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
             
             res.render('evaluacion_enfermeria/nueva', {
                 title: 'Nueva Evaluación de Enfermería',
                 admision: admision,
                 paciente: paciente,
-                evaluacion: {}
+                evaluacion: {},
+                evaluacionMedica: evaluacionMedica
             });
         } catch (error) {
             console.error('Error al mostrar formulario de evaluación:', error);
@@ -49,11 +60,14 @@ const EvaluacionEnfermeriaController = {
             try {
                 const admision = await Admision.buscarPorId(admisionId);
                 const paciente = await Paciente.buscarPorId(admision.paciente_id);
+                const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admisionId);
+                const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
                 res.render('evaluacion_enfermeria/nueva', {
                     title: 'Nueva Evaluación de Enfermería',
                     admision: admision,
                     paciente: paciente,
                     evaluacion: req.body,
+                    evaluacionMedica: evaluacionMedica,
                     errors: [{ msg: 'Error al guardar en la base de datos.' }]
                 });
             } catch (innerError) {
@@ -73,12 +87,15 @@ const EvaluacionEnfermeriaController = {
             }
             const admision = await Admision.buscarPorId(evaluacion.admision_id);
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
+            const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admision.id);
+            const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
 
             res.render('evaluacion_enfermeria/detalle', {
                 title: 'Detalle de Evaluación de Enfermería',
                 evaluacion: evaluacion,
                 admision: admision,
-                paciente: paciente
+                paciente: paciente,
+                evaluacionMedica: evaluacionMedica
             });
         } catch (error) {
             console.error('Error al ver detalle de evaluación:', error);
@@ -97,12 +114,15 @@ const EvaluacionEnfermeriaController = {
             }
             const admision = await Admision.buscarPorId(evaluacion.admision_id);
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
+            const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admision.id);
+            const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
 
             res.render('evaluacion_enfermeria/editar', {
                 title: 'Editar Evaluación de Enfermería',
                 evaluacion: evaluacion,
                 admision: admision,
-                paciente: paciente
+                paciente: paciente,
+                evaluacionMedica: evaluacionMedica
             });
         } catch (error) {
             console.error('Error al mostrar formulario de edición:', error);

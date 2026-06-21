@@ -6,7 +6,7 @@ const EvaluacionEnfermeriaController = require('../controllers/evaluacionEnferme
 router.get('/', (req, res) => res.redirect('/admisiones'));
 
 // Mostrar formulario para nueva evaluación
-router.get('/nueva/:admisionId', EvaluacionEnfermeriaController.mostrarFormularioNueva);
+router.get('/admision/:admisionId/nueva', EvaluacionEnfermeriaController.mostrarFormularioNueva);
 
 // Guardar nueva evaluación
 router.post('/admision/:admisionId', EvaluacionEnfermeriaController.guardar);
@@ -14,8 +14,9 @@ router.post('/admision/:admisionId', EvaluacionEnfermeriaController.guardar);
 // Ver detalle de una evaluación
 router.get('/:id', EvaluacionEnfermeriaController.verDetalle);
 
-// Mostrar formulario para editar
+// Mostrar formulario para editar (soportando tanto /editar como /edit)
 router.get('/:id/editar', EvaluacionEnfermeriaController.mostrarFormularioEditar);
+router.get('/:id/edit', EvaluacionEnfermeriaController.mostrarFormularioEditar);
 
 // Procesar actualización
 router.post('/:id/actualizar', EvaluacionEnfermeriaController.actualizar);
