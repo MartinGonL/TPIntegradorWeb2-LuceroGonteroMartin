@@ -17,6 +17,12 @@ html(lang="es")
           li: a(href="/") Inicio
           li: a(href="/contacto") Contacto
           if usuario
+            li: a(href="/pacientes") Pacientes
+            li: a(href="/admisiones") Admisiones
+            if usuario.rol === 'Admin'
+              li: a(href="/alas") Alas
+              li: a(href="/habitaciones") Habitaciones
+              li: a(href="/camas") Camas
             li(style="color: #e2c3ff; font-weight: bold;") #{usuario.nombre_completo} (#{usuario.rol})
             li: a(href="/auth/logout") Cerrar Sesión
 

@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const EvaluacionEnfermeriaController = require('../controllers/evaluacionEnfermeriaController');
 
+// Redirigir la raíz a admisiones
+router.get('/', (req, res) => res.redirect('/admisiones'));
+
 // Mostrar formulario para nueva evaluación
 router.get('/nueva/:admisionId', EvaluacionEnfermeriaController.mostrarFormularioNueva);
 

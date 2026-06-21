@@ -63,7 +63,7 @@ const PacienteController = {
             return res.status(500).render('paciente/nuevo', {
                 title: 'Registrar Nuevo Paciente',
                 errors: [{ msg: 'Error al guardar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe, no podrá duplicarlo.' }],
-                pacienteData: datosPaciente
+                paciente: datosPaciente
             });
 
         }

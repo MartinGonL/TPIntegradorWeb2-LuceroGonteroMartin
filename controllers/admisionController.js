@@ -123,7 +123,7 @@ const AdmisionController = {
 
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
             const evaluacionEnfermeria = await EvaluacionEnfermeria.obtenerPorIdAdmision(admision.id); 
-            const evaluacionesMedicas = await EvaluacionMedica.obtenerPorIdAdmision(admision.id); 
+            const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admision.id); 
 
             res.render('admision/detalle', {
                 title: `Detalles de Admisión para ${paciente ? paciente.nombre + ' ' + paciente.apellido : 'Paciente Desconocido'} (ID: ${admision.id})`,

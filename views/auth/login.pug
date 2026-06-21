@@ -3,20 +3,20 @@ extends ../layout
 block content
   .container.mt-5
     .row.justify-content-center
-      .col-md-5
+      .col-sm-10.col-md-9.col-lg-7
         .card.shadow
           .card-header.bg-primary.text-white
-            h4.text-center.mb-0 Iniciar Sesión
-          .card-body
+            h4.text-center.mb-0(style="font-size: 2.2rem; padding: 0.5rem 0;") Iniciar Sesión
+          .card-body.p-5
             if errors
-              .alert.alert-danger
+              .alert.alert-danger(style="font-size: 1.5rem;")
                 each error in errors
                   p.mb-0= error.msg
-            form(method="POST" action="/auth/login")
-              .form-group
-                label(for="nombre_usuario") Nombre de Usuario:
-                input.form-control(type="text" id="nombre_usuario" name="nombre_usuario" required value=(nombre_usuario || ''))
-              .form-group
-                label(for="password") Contraseña:
-                input.form-control(type="password" id="password" name="password" required)
-              button.btn.btn-primary.btn-block(type="submit") Ingresar
+            form(method="POST" action="/auth/login" style="border: none; padding: 0; box-shadow: none; background: none; max-width: 100%;")
+              .form-group.mb-4
+                label(for="nombre_usuario" style="font-size: 1.8rem; font-weight: bold;") Nombre de Usuario:
+                input.form-control(type="text" id="nombre_usuario" name="nombre_usuario" required value=(nombre_usuario || '') style="height: 70px; font-size: 1.8rem; padding: 1rem 1.5rem;")
+              .form-group.mb-4
+                label(for="password" style="font-size: 1.8rem; font-weight: bold;") Contraseña:
+                input.form-control(type="password" id="password" name="password" required style="height: 70px; font-size: 1.8rem; padding: 1rem 1.5rem;")
+              button.btn.btn-primary.btn-block.mt-5(type="submit" style="height: 75px; font-size: 2rem; font-weight: bold;") Ingresar

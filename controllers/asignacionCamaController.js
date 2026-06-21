@@ -114,6 +114,44 @@ const AsignacionCamaController = {
         } finally {
             if (conexion) conexion.release();
         }
+    },
+
+    async liberarCama(req, res, next) {
+        const { admisionId } = req.params;
+        let conexion;
+        try {
+            const admision = await Admision.buscarPorId(admisionId);
+            if (!admision) {
+                const err = new Error('Admisión no encontrada.');
+                err.status = 404;
+                return next(err);
+            }
+
+            conexion = await pool.getConnection();
+            await conexion.beginTransaction();
+
+            const camaId = admision.cama_asignada_id;
+            if (camaId) {
+                await conexion.query(
+                    "UPDATE camas SET estado_cama = 'Libre', paciente_actual_id = NULL, admision_actual_id = NULL WHERE id = ?",
+                    [camaId]
+                );
+            }
+
+            await conexion.query(
+                "UPDATE admisiones SET cama_asignada_id = NULL WHERE id = ?",
+                [admisionId]
+            );
+
+            await conexion.commit();
+            res.redirect(`/admisiones/${admisionId}`);
+        } catch (error) {
+            if (conexion) await conexion.rollback();
+            console.error('Error al liberar cama:', error);
+            next(error);
+        } finally {
+            if (conexion) conexion.release();
+        }
     }
 };
 

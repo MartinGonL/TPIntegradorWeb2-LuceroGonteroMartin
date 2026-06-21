@@ -3,9 +3,9 @@ extends layout
 block content
   .container.mt-5
     .row.justify-content-center
-      .col-md-8
+      .col-md-12
         h1.text-center.mb-4 #{title}
-        p.text-center Bienvenido a Clinica Gontero.
+        p.text-center Bienvenido, #{usuario.nombre_completo} (#{usuario.rol}).
         .row.g-4
           .col-md-6.col-lg-3
             a(href="/pacientes/nuevo", class="card text-center menu-card mb-4 btn-violeta")
@@ -22,8 +22,20 @@ block content
               .card-body
                 i.fas.fa-notes-medical.fa-2x.mb-2
                 h5.card-title Ver Todas las Admisiones
-          .col-md-6.col-lg-3
-            a(href="/admisiones/nueva", class="card text-center menu-card mb-4 btn-violeta")
-              .card-body
-                i.fas.fa-plus-square.fa-2x.mb-2
-                h5.card-title Proximamente Nueva Funcion
+
+          if usuario.rol === 'Admin'
+            .col-md-6.col-lg-3
+              a(href="/alas", class="card text-center menu-card mb-4 btn-violeta")
+                .card-body
+                  i.fas.fa-hotel.fa-2x.mb-2
+                  h5.card-title Gestionar Alas
+            .col-md-6.col-lg-3
+              a(href="/habitaciones", class="card text-center menu-card mb-4 btn-violeta")
+                .card-body
+                  i.fas.fa-door-open.fa-2x.mb-2
+                  h5.card-title Gestionar Habitaciones
+            .col-md-6.col-lg-3
+              a(href="/camas", class="card text-center menu-card mb-4 btn-violeta")
+                .card-body
+                  i.fas.fa-bed.fa-2x.mb-2
+                  h5.card-title Gestionar Camas
