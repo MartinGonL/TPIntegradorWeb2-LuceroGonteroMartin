@@ -37,11 +37,9 @@ block content
       div.card-header Detalles de Evaluación de Enfermería 
       div.card-body
         dl.row
-          dt.col-sm-3 ID Evaluación 
-          dd.col-sm-9= evaluacion.id
           dt.col-sm-3 Fecha Evaluación 
           dd.col-sm-9= (evaluacion.fecha || evaluacion.fecha_evaluacion) ? new Date(evaluacion.fecha || evaluacion.fecha_evaluacion).toLocaleString() : 'N/A'
-          dt.col-sm-3 ID Enfermero/a 
+          dt.col-sm-3 Enfermero/a 
           dd.col-sm-9= evaluacion.enfermero_id || 'N/A'
           
           h5.mt-3.col-12 Información General

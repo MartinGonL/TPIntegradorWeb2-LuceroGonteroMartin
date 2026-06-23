@@ -13,7 +13,6 @@ block content
       table.table.table-striped.table-hover.table-bordered
         thead.thead-dark
           tr
-            th ID
             th Ala 
             th Nº Habitación 
             th Tipo 
@@ -23,7 +22,6 @@ block content
         tbody
           each habitacion in habitaciones
             tr
-              td= habitacion.id
               td= habitacion.ala_nombre 
               td= habitacion.numero_habitacion
               td= habitacion.tipo

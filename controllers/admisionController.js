@@ -2,6 +2,7 @@ const Paciente = require('../models/pacienteModel.js');
 const Admision = require('../models/admisionModel.js'); 
 const EvaluacionEnfermeria = require('../models/evaluacionEnfermeriaModel.js');
 const EvaluacionMedica = require('../models/evaluacionMedicaModel.js'); 
+const Usuario = require('../models/usuarioModel.js'); 
 
 const ESTADOS_ADMISION_VALIDOS = ['Activa', 'Completada', 'Cancelada'];
 
@@ -22,10 +23,12 @@ const AdmisionController = {
                 err.status = 404;
                 return next(err);
             }
+            const medicos = await Usuario.listarPorRol('Medico');
             res.render('admision/nueva', {
                 title: `Nueva Admisión para ${paciente.nombre} ${paciente.apellido}`, 
                 paciente: paciente,
-                paciente_id: paciente.id 
+                paciente_id: paciente.id,
+                medicos: medicos
             });
         } catch (error) {
             console.error('Error al obtener datos para el formulario de admisión:', error);
@@ -38,71 +41,56 @@ const AdmisionController = {
         const { paciente_id, tipo_admision, medico_referente, diagnostico_inicial } = req.body;
         const datosAdmision = { paciente_id, tipo_admision, medico_referente, diagnostico_inicial };
 
-        // Lista de médicos válidos (debe coincidir con el select del formulario)
-        const MEDICOS_VALIDOS = [
-            "Dr. Juan Pérez",
-            "Dra. Ana Gómez",
-            "Dr. Carlos Ruiz",
-            "Dra. Laura Fernández",
-            "Dra. Orellano Mayra",
-            "Dr. Martínez",
-            "Dr. López",
-            "Dr. García",
-            "Dr. Sánchez"
-        ];
+        try {
+            const medicosBD = await Usuario.listarPorRol('Medico');
+            const MEDICOS_VALIDOS = medicosBD.map(m => m.nombre_completo);
 
-        // Tipos de admisión válidos (debe coincidir con el select del formulario)
-        const TIPOS_ADMISION_VALIDOS = [
-            "Programada",
-            "Derivación Médica",
-            "Emergencia"
-        ];
+            // Tipos de admisión válidos (debe coincidir con el select del formulario)
+            const TIPOS_ADMISION_VALIDOS = [
+                "Programada",
+                "Derivación Médica",
+                "Emergencia"
+            ];
 
-        const errores = [];
-        if (!paciente_id || isNaN(Number(paciente_id)) || Number(paciente_id) <= 0)
-            errores.push({ msg: 'El ID del paciente es obligatorio y debe ser un número válido.' });
+            const errores = [];
+            if (!paciente_id || isNaN(Number(paciente_id)) || Number(paciente_id) <= 0)
+                errores.push({ msg: 'El ID del paciente es obligatorio y debe ser un número válido.' });
 
-        if (!tipo_admision || !TIPOS_ADMISION_VALIDOS.includes(tipo_admision))
-            errores.push({ msg: 'El campo Tipo de Admisión es obligatorio y debe ser válido.' });
+            if (!tipo_admision || !TIPOS_ADMISION_VALIDOS.includes(tipo_admision))
+                errores.push({ msg: 'El campo Tipo de Admisión es obligatorio y debe ser válido.' });
 
-        if (!medico_referente || !MEDICOS_VALIDOS.includes(medico_referente))
-            errores.push({ msg: 'Seleccione un médico referente válido.' });
+            if (!medico_referente || !MEDICOS_VALIDOS.includes(medico_referente))
+                errores.push({ msg: 'Seleccione un médico referente válido.' });
 
-        if (!diagnostico_inicial || diagnostico_inicial.trim().length < 5)
-            errores.push({ msg: 'El Diagnóstico Inicial es obligatorio y debe tener al menos 5 caracteres.' });
+            if (!diagnostico_inicial || diagnostico_inicial.trim().length < 5)
+                errores.push({ msg: 'El Diagnóstico Inicial es obligatorio y debe tener al menos 5 caracteres.' });
 
-        if (errores.length > 0) {
-            try {
+            if (errores.length > 0) {
                 const paciente = await Paciente.buscarPorId(paciente_id);
-                if (!paciente && paciente_id) { 
-                    errores.push({msg: 'Paciente especificado para la admisión no fue encontrado.'});
-                }
                 return res.status(400).render('admision/nueva', {
                     title: `Nueva Admisión para ${paciente ? paciente.nombre + ' ' + paciente.apellido : 'Paciente Desconocido'}`,
                     errors: errores,
                     paciente: paciente,
                     paciente_id: paciente_id,
-                    datosAdmision: datosAdmision
+                    datosAdmision: datosAdmision,
+                    medicos: medicosBD
                 });
-            } catch (errorAlObtener) {
-                console.error('Error al obtener datos del paciente durante la falla de validación de admisión:', errorAlObtener);
-                return next(errorAlObtener);
             }
-        }
 
-        try {
             const idNuevaAdmision = await Admision.crear(datosAdmision);
             res.redirect(`/admisiones/${idNuevaAdmision}`);
         } catch (error) {
             console.error('Error al registrar la admisión:', error);
             try {
                 const paciente = await Paciente.buscarPorId(paciente_id);
+                const medicosBD = await Usuario.listarPorRol('Medico');
                 res.status(500).render('admision/nueva', {
                     title: `Nueva Admisión para ${paciente ? paciente.nombre + ' ' + paciente.apellido : 'Paciente Desconocido'}`,
                     errors: [{ msg: 'Error al registrar la admisión. Intente nuevamente.' }],
                     paciente: paciente,
                     paciente_id: paciente_id,
-                    datosAdmision: datosAdmision
+                    datosAdmision: datosAdmision,
+                    medicos: medicosBD
                 });
             } catch (errorAlObtener) {
                 console.error('Error al obtener datos del paciente después de un error de creación de admisión:', errorAlObtener);

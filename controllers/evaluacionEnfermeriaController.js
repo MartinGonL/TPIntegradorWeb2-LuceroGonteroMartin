@@ -2,6 +2,7 @@ const EvaluacionEnfermeria = require('../models/evaluacionEnfermeriaModel');
 const EvaluacionMedica = require('../models/evaluacionMedicaModel');
 const Admision = require('../models/admisionModel');
 const Paciente = require('../models/pacienteModel');
+const Usuario = require('../models/usuarioModel');
 
 const EvaluacionEnfermeriaController = {
 
@@ -24,13 +25,15 @@ const EvaluacionEnfermeriaController = {
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
             const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admisionId);
             const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
+            const enfermeros = await Usuario.listarPorRol('Enfermero');
             
             res.render('evaluacion_enfermeria/nueva', {
                 title: 'Nueva Evaluación de Enfermería',
                 admision: admision,
                 paciente: paciente,
                 evaluacion: {},
-                evaluacionMedica: evaluacionMedica
+                evaluacionMedica: evaluacionMedica,
+                enfermeros: enfermeros
             });
         } catch (error) {
             console.error('Error al mostrar formulario de evaluación:', error);
@@ -63,12 +66,14 @@ const EvaluacionEnfermeriaController = {
                 const paciente = await Paciente.buscarPorId(admision.paciente_id);
                 const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admisionId);
                 const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
+                const enfermeros = await Usuario.listarPorRol('Enfermero');
                 res.render('evaluacion_enfermeria/nueva', {
                     title: 'Nueva Evaluación de Enfermería',
                     admision: admision,
                     paciente: paciente,
                     evaluacion: req.body,
                     evaluacionMedica: evaluacionMedica,
+                    enfermeros: enfermeros,
                     errors: [{ msg: 'Error al guardar en la base de datos.' }]
                 });
             } catch (innerError) {
@@ -117,13 +122,15 @@ const EvaluacionEnfermeriaController = {
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
             const evaluacionesMedicas = await EvaluacionMedica.listarPorAdmision(admision.id);
             const evaluacionMedica = evaluacionesMedicas.length > 0 ? evaluacionesMedicas[0] : null;
+            const enfermeros = await Usuario.listarPorRol('Enfermero');
 
             res.render('evaluacion_enfermeria/editar', {
                 title: 'Editar Evaluación de Enfermería',
                 evaluacion: evaluacion,
                 admision: admision,
                 paciente: paciente,
-                evaluacionMedica: evaluacionMedica
+                evaluacionMedica: evaluacionMedica,
+                enfermeros: enfermeros
             });
         } catch (error) {
             console.error('Error al mostrar formulario de edición:', error);

@@ -10,7 +10,6 @@ block content
         div.card
           div.card-header Detalles de la Admisión 
           div.card-body
-            p.card-text #[strong ID de Admisión:] #{admision.id} 
             p.card-text #[strong Fecha de Admisión:] #{admision.fecha_admision ? new Date(admision.fecha_admision).toLocaleString() : 'N/A'} 
       div.col-md-6
         div.card
@@ -22,7 +21,6 @@ block content
     div.card.mt-3.mb-3
       div.card-header Evaluación Médica Vinculada 
       div.card-body
-        p.card-text #[strong ID Evaluación Médica:] #{evaluacionMedica.id} 
         p.card-text #[strong Fecha Evaluación Médica:] #{evaluacionMedica.fecha_evaluacion ? new Date(evaluacionMedica.fecha_evaluacion).toLocaleString() : 'N/A'} 
         p.card-text
           a.btn.btn-violeta.btn-sm.mr-2(href=`/evaluaciones-medicas/${evaluacionMedica.id}`) Ver Detalle de Evaluación Médica 
@@ -40,8 +38,12 @@ block content
       
       h3.mt-4 Información General
       div.form-group.mt-3
-        label(for="enfermero_id") ID Enfermero/a:
-        input(type="text" id="enfermero_id" name="enfermero_id" value=evaluacion.enfermero_id required class="form-control")
+        label(for="enfermero_id") Enfermero/a:
+        select#enfermero_id.form-control(name="enfermero_id" required)
+          option(value="" disabled) -- Seleccione Enfermero/a --
+          if enfermeros
+            each enfermero in enfermeros
+              option(value=enfermero.nombre_completo selected=(evaluacion.enfermero_id === enfermero.nombre_completo || evaluacion.enfermero_id == enfermero.id)) #{enfermero.nombre_completo}
 
       div.form-group.mt-3
         label(for="motivo_internacion_actual") Motivo de Internación Actual:

@@ -2,6 +2,7 @@ const EvaluacionMedica = require('../models/evaluacionMedicaModel');
 const EvaluacionEnfermeria = require('../models/evaluacionEnfermeriaModel');
 const Admision = require('../models/admisionModel');
 const Paciente = require('../models/pacienteModel');
+const Usuario = require('../models/usuarioModel');
 
 const EvaluacionMedicaController = {
 
@@ -23,13 +24,15 @@ const EvaluacionMedicaController = {
 
             const paciente = await Paciente.buscarPorId(admision.paciente_id);
             const evaluacionEnfermeria = await EvaluacionEnfermeria.obtenerPorIdAdmision(admisionId);
-
+            const medicos = await Usuario.listarPorRol('Medico');
+ 
             res.render('evaluacion_medica/nueva', {
                 title: 'Nueva Evaluación Médica',
                 admision,
                 paciente,
                 evaluacionEnfermeria,
-                evaluacionMedica: {}
+                evaluacionMedica: {},
+                medicos
             });
         } catch (error) {
             next(error);
@@ -68,12 +71,14 @@ const EvaluacionMedicaController = {
                 const admision = await Admision.buscarPorId(admisionId);
                 const paciente = await Paciente.buscarPorId(admision.paciente_id);
                 const evaluacionEnfermeria = await EvaluacionEnfermeria.obtenerPorIdAdmision(admisionId);
+                const medicos = await Usuario.listarPorRol('Medico');
                 res.render('evaluacion_medica/nueva', {
                     title: 'Nueva Evaluación Médica',
                     admision,
                     paciente,
                     evaluacionEnfermeria,
                     evaluacionMedica: req.body,
+                    medicos,
                     errors: [{ msg: 'Error al guardar la evaluación médica en la base de datos.' }]
                 });
             } catch (innerError) {
@@ -132,13 +137,15 @@ const EvaluacionMedicaController = {
             } else {
                 evaluacionEnfermeria = await EvaluacionEnfermeria.obtenerPorIdAdmision(evaluacion.admision_id);
             }
-
+            const medicos = await Usuario.listarPorRol('Medico');
+ 
             res.render('evaluacion_medica/editar', {
                 title: 'Editar Evaluación Médica',
                 evaluacionMedica: evaluacion,
                 admision,
                 paciente,
-                evaluacionEnfermeria
+                evaluacionEnfermeria,
+                medicos
             });
         } catch (error) {
             next(error);

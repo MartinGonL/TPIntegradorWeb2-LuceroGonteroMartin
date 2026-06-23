@@ -14,6 +14,20 @@ const Usuario = {
         } finally {
             if (conexion) conexion.release();
         }
+    },
+
+    listarPorRol: async (rol) => {
+        let conexion;
+        try {
+            conexion = await pool.getConnection();
+            const [filas] = await conexion.query("SELECT * FROM usuarios WHERE rol = ?", [rol]);
+            return filas;
+        } catch (error) {
+            console.error('Error en Usuario.listarPorRol:', error);
+            throw error;
+        } finally {
+            if (conexion) conexion.release();
+        }
     }
 
 };

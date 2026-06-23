@@ -23,9 +23,6 @@ block content
       div.card-header Detalles de la Admisión 
       div.card-body
         dl.row
-          dt.col-sm-4 ID de Admisión 
-          dd.col-sm-8= admision.id
-          
           dt.col-sm-4 Fecha de Admisión
           dd.col-sm-8= admision.fecha_admision ? new Date(admision.fecha_admision).toLocaleString() : 'N/A'
           

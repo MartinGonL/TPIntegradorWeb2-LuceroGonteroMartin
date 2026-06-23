@@ -52,7 +52,7 @@ block content
         each admision in admisiones
           li.list-group-item
             div.d-flex.w-100.justify-content-between
-              h5.mb-1 ID Admisión: #{admision.id} - #{admision.tipo_admision} 
+              h5.mb-1 Admisión: #{admision.tipo_admision} 
               small= admision.fecha_admision ? new Date(admision.fecha_admision).toLocaleDateString() : 'N/A'
             p.mb-1 Diagnóstico Inicial: #{admision.diagnostico_inicial || 'N/A'}
             small Estado: 

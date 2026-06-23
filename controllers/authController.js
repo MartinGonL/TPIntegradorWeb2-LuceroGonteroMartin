@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuarioModel');
+const crypto = require('crypto');
 
 const AuthController = {
 
@@ -28,7 +29,10 @@ const AuthController = {
         try {
             const usuario = await Usuario.buscarPorNombreUsuario(nombre_usuario);
             
-            if (!usuario || usuario.password !== password) {
+            // Hashear la contraseña ingresada usando SHA-256 nativo
+            const passwordHasheado = crypto.createHash('sha256').update(password).digest('hex');
+            
+            if (!usuario || usuario.password !== passwordHasheado) {
                 return res.status(400).render('auth/login', {
                     title: 'Iniciar Sesión',
                     errors: [{ msg: 'Usuario o contraseña incorrectos.' }],

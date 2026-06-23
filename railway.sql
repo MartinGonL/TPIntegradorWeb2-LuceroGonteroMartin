@@ -40,9 +40,15 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre_usuario`, `password`, `rol`, `nombre_completo`) VALUES
-(1, 'admin', 'admin123', 'Admin', 'Administrador del Sistema'),
-(2, 'medico1', 'medico123', 'Medico', 'Dr. Juan Pérez'),
-(3, 'enfermero1', 'enfermero123', 'Enfermero', 'Enfermero Pedro');
+(1, 'admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Admin', 'Administrador del Sistema'),
+(2, 'medico1', '673ab82a6530ee3bd9b04ee72a4d66afa7fa059aedc685cf44e35d29d90ebafa', 'Medico', 'Dr. Juan Pérez'),
+(3, 'enfermero1', '24c1e28fc84b9db1dbb64886f74d2087854fdee36033da450b660f12e1272586', 'Enfermero', 'Enfermero Pedro'),
+(4, 'enfermera2', '90bf2403fac61ad700d74a750fbabb599d17097dc98ca07be6caa643a7d23a29', 'Enfermero', 'Enfermera Ana Gómez'),
+(5, 'enfermera3', '90bf2403fac61ad700d74a750fbabb599d17097dc98ca07be6caa643a7d23a29', 'Enfermero', 'Enfermera María Rodríguez'),
+(6, 'enfermero4', '90bf2403fac61ad700d74a750fbabb599d17097dc98ca07be6caa643a7d23a29', 'Enfermero', 'Enfermero José López'),
+(7, 'medico2', '673ab82a6530ee3bd9b04ee72a4d66afa7fa059aedc685cf44e35d29d90ebafa', 'Medico', 'Dra. Ana Gómez'),
+(8, 'medico3', '673ab82a6530ee3bd9b04ee72a4d66afa7fa059aedc685cf44e35d29d90ebafa', 'Medico', 'Dr. Carlos Ruiz'),
+(9, 'medico4', '673ab82a6530ee3bd9b04ee72a4d66afa7fa059aedc685cf44e35d29d90ebafa', 'Medico', 'Dra. Laura Fernández');
 
 -- --------------------------------------------------------
 
@@ -159,6 +165,16 @@ CREATE TABLE `evaluaciones_enfermeria` (
   `observaciones_adicionales` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `evaluaciones_enfermeria`
+--
+
+INSERT INTO `evaluaciones_enfermeria` (`id`, `admision_id`, `enfermero_id`, `fecha`, `motivo_internacion_actual`, `signos_vitales_ta`, `signos_vitales_fc`, `signos_vitales_fr`, `signos_vitales_temp`, `signos_vitales_sato2`, `observaciones_adicionales`) VALUES
+(1, 1, 'Enfermero Pedro', '2025-06-23 16:15:00', 'Paciente ingresa por derivación con fuerte dolor en miembro superior derecho tras caída de altura.', '130/85', 88, 18, 36.70, 98, 'Paciente colaborador, dolor agudo y deformación evidente en brazo derecho.'),
+(2, 2, 'Enfermera Ana Gómez', '2025-06-23 16:20:00', 'Ingreso programado para control y chequeo de rutina cardiológico.', '120/80', 72, 16, 36.40, 99, 'Paciente asintomático, normotenso, frecuencia regular.'),
+(3, 3, 'Enfermero José López', '2025-06-23 16:25:00', 'Paciente traído de urgencia por personal policial por herida de arma de fuego.', '90/50', 110, 24, 35.90, 92, 'Paciente pálido, estuporoso, sangrado activo controlado en el ingreso.'),
+(4, 4, 'Enfermera María Rodríguez', '2025-06-23 16:30:00', 'Paciente herido por arma de fuego ingresado por guardia.', '110/70', 90, 20, 36.20, 95, 'Paciente hemodinámicamente estable tras reanimación inicial.');
+
 -- --------------------------------------------------------
 
 --
@@ -184,6 +200,16 @@ CREATE TABLE `evaluaciones_medicas` (
   `recomendaciones_alta_seguimiento` text DEFAULT NULL,
   `notas_medicas_adicionales` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `evaluaciones_medicas`
+--
+
+INSERT INTO `evaluaciones_medicas` (`id`, `admision_id`, `fecha_evaluacion`, `observaciones`, `medico_id`, `evaluacion_enfermeria_id`, `diagnostico_principal`, `diagnosticos_secundarios`, `plan_tratamiento_inicial`, `tratamiento_farmacologico`, `tratamiento_no_farmacologico`, `procedimientos_medicos`, `interconsultas_solicitadas`, `solicitud_pruebas_diagnosticas`, `observaciones_evolucion`, `recomendaciones_alta_seguimiento`, `notas_medicas_adicionales`) VALUES
+(1, 1, '2025-06-23 16:35:00', 'Paciente estable en reposo.', 'Dr. Juan Pérez', 1, 'Fractura expuesta de cúbito y radio derecho (AO tipo 22-A1).', 'Politraumatismo leve.', 'Reducción cerrada bajo anestesia e inmovilización con yeso.', 'Morfina 2mg EV, Cefalotina 1g EV cada 6 horas, Diclofenac 75mg IM.', 'Reposo absoluto de miembro afectado, hielo local.', 'Radiografía de brazo anteroposterior y lateral.', 'Traumatología y Ortopedia.', 'Hemograma completo, coagulograma, ECG de riesgo quirúrgico.', 'Favorable tras inmovilización, disminuye la intensidad del dolor.', 'Control radiológico en 7 días, pautas de alarma por síndrome compartimental.', 'Pendiente programar cirugía si hay desplazamiento secundario.'),
+(2, 2, '2025-06-23 16:40:00', 'Sin particularidades en el examen cardiovascular.', 'Dra. Ana Gómez', 2, 'Evaluación cardiovascular prequirúrgica.', 'Hipertensión arterial controlada.', 'Continuar con medicación habitual y controles cardiológicos ambulatorios.', 'Enalapril 10mg cada 12 horas.', 'Dieta hiposódica, ejercicio aeróbico leve.', 'Ecocardiograma Doppler, ECG de 12 derivaciones.', 'Cardiología clínica.', 'Laboratorio de rutina con perfil lipídico e ionograma.', 'Estable, ritmo sinusal, sin soplos ni signos de insuficiencia cardíaca.', 'Apto cardiovascular clase I.', 'Todo normal para el control de rutina.'),
+(3, 3, '2025-06-23 16:45:00', 'Paciente en estado crítico, requiere monitorización constante.', 'Dr. Carlos Ruiz', 3, 'Shock hipovolémico secundario a herida de arma de fuego en muslo izquierdo.', 'Anemia aguda.', 'Reanimación enérgica con cristaloides y hemoderivados, exploración quirúrgica inmediata.', 'Expansores plasmáticos, transfusión de 2 unidades de glóbulos rojos, Ceftriaxona 2g EV.', 'Oxigenoterapia por máscara, monitoreo continuo invasivo.', 'Compresión local, colocación de accesos venosos gruesos.', 'Cirugía General y Hemoterapia.', 'Hematocrito seriado, compatibilidad de sangre, gases en sangre arterial.', 'Crítica, respuesta parcial a la expansión de volumen.', 'Pase inmediato a quirófano de urgencia.', 'Se da aviso a la fiscalía de turno por hecho de violencia.'),
+(4, 4, '2025-06-23 16:50:00', 'Evolución quirúrgica satisfactoria.', 'Dra. Laura Fernández', 4, 'Herida de arma de fuego en región abdominal (con resolución quirúrgica previa exitosa).', 'Postoperatorio de laparotomía exploradora.', 'Alta médica tras evolución postquirúrgica satisfactoria sin complicaciones.', 'Amoxicilina/Ácido Clavulánico 1g c/12h vía oral, Ibuprofeno 400mg c/8h.', 'Curación diaria de herida quirúrgica, dieta blanda progresiva.', 'Retiro de puntos de sutura al décimo día.', 'Cirugía General (control externo).', 'Hemograma de control pre-alta.', 'Paciente deambulando, tolera dieta, heridas limpias en proceso de cicatrización.', 'Reposo relativo por 20 días, evitar esfuerzos físicos, control por consultorio externo.', 'Se firma alta médica.');
 
 -- --------------------------------------------------------
 
@@ -336,13 +362,13 @@ ALTER TABLE `camas`
 -- AUTO_INCREMENT de la tabla `evaluaciones_enfermeria`
 --
 ALTER TABLE `evaluaciones_enfermeria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `evaluaciones_medicas`
 --
 ALTER TABLE `evaluaciones_medicas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `habitaciones`
