@@ -42,14 +42,15 @@ const EvaluacionEnfermeriaController = {
         const { admisionId } = req.params;
         const datos = { 
             admision_id: admisionId,
-            ...req.body 
+            enfermero_id: req.body.enfermero_id || null,
+            motivo_internacion_actual: req.body.motivo_internacion_actual || null,
+            signos_vitales_ta: req.body.signos_vitales_ta || null,
+            signos_vitales_fc: req.body.signos_vitales_fc === '' ? null : (req.body.signos_vitales_fc || null),
+            signos_vitales_fr: req.body.signos_vitales_fr === '' ? null : (req.body.signos_vitales_fr || null),
+            signos_vitales_temp: req.body.signos_vitales_temp === '' ? null : (req.body.signos_vitales_temp || null),
+            signos_vitales_sato2: req.body.signos_vitales_sato2 === '' ? null : (req.body.signos_vitales_sato2 || null),
+            observaciones_adicionales: req.body.observaciones_adicionales || null
         };
-
-        // Limpieza de datos numéricos vacíos
-        if (datos.signos_vitales_fc === '') datos.signos_vitales_fc = null;
-        if (datos.signos_vitales_fr === '') datos.signos_vitales_fr = null;
-        if (datos.signos_vitales_temp === '') datos.signos_vitales_temp = null;
-        if (datos.signos_vitales_sato2 === '') datos.signos_vitales_sato2 = null;
 
         try {
             await EvaluacionEnfermeria.crear(datos);
@@ -132,13 +133,16 @@ const EvaluacionEnfermeriaController = {
 
     async actualizar(req, res, next) {
         const { id } = req.params;
-        const datos = { ...req.body };
-
-        // Limpieza de datos numéricos vacíos
-        if (datos.signos_vitales_fc === '') datos.signos_vitales_fc = null;
-        if (datos.signos_vitales_fr === '') datos.signos_vitales_fr = null;
-        if (datos.signos_vitales_temp === '') datos.signos_vitales_temp = null;
-        if (datos.signos_vitales_sato2 === '') datos.signos_vitales_sato2 = null;
+        const datos = {
+            enfermero_id: req.body.enfermero_id || null,
+            motivo_internacion_actual: req.body.motivo_internacion_actual || null,
+            signos_vitales_ta: req.body.signos_vitales_ta || null,
+            signos_vitales_fc: req.body.signos_vitales_fc === '' ? null : (req.body.signos_vitales_fc || null),
+            signos_vitales_fr: req.body.signos_vitales_fr === '' ? null : (req.body.signos_vitales_fr || null),
+            signos_vitales_temp: req.body.signos_vitales_temp === '' ? null : (req.body.signos_vitales_temp || null),
+            signos_vitales_sato2: req.body.signos_vitales_sato2 === '' ? null : (req.body.signos_vitales_sato2 || null),
+            observaciones_adicionales: req.body.observaciones_adicionales || null
+        };
 
         try {
             const evaluacionOriginal = await EvaluacionEnfermeria.obtenerPorId(id);

@@ -151,29 +151,12 @@ CREATE TABLE `evaluaciones_enfermeria` (
   `enfermero_id` varchar(50) DEFAULT NULL,
   `fecha` datetime NOT NULL DEFAULT current_timestamp(),
   `motivo_internacion_actual` text DEFAULT NULL,
-  `antecedentes_personales` text DEFAULT NULL,
-  `antecedentes_familiares` text DEFAULT NULL,
-  `historial_medico_previo` text DEFAULT NULL,
-  `alergias` text DEFAULT NULL,
-  `medicacion_actual` text DEFAULT NULL,
-  `evaluacion_fisica` text DEFAULT NULL,
   `signos_vitales_ta` varchar(20) DEFAULT NULL,
   `signos_vitales_fc` int(11) DEFAULT NULL,
   `signos_vitales_fr` int(11) DEFAULT NULL,
   `signos_vitales_temp` decimal(4,2) DEFAULT NULL,
   `signos_vitales_sato2` int(11) DEFAULT NULL,
-  `nivel_conciencia` varchar(100) DEFAULT NULL,
-  `estado_piel_mucosas` text DEFAULT NULL,
-  `movilidad` varchar(100) DEFAULT NULL,
-  `necesidades_basicas_alimentacion` text DEFAULT NULL,
-  `necesidades_basicas_higiene` text DEFAULT NULL,
-  `necesidades_basicas_eliminacion` text DEFAULT NULL,
-  `necesidades_basicas_descanso_sueno` text DEFAULT NULL,
-  `valoracion_dolor_escala` varchar(50) DEFAULT NULL,
-  `valoracion_dolor_localizacion` varchar(100) DEFAULT NULL,
-  `valoracion_dolor_caracteristicas` text DEFAULT NULL,
-  `observaciones_adicionales` text DEFAULT NULL,
-  `plan_cuidados_inicial` text NOT NULL
+  `observaciones_adicionales` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

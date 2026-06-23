@@ -77,9 +77,21 @@ const Admision = {
                 a.*, 
                 p.nombre as paciente_nombre, 
                 p.apellido as paciente_apellido, 
-                p.dni as paciente_dni 
+                p.dni as paciente_dni,
+                ee.id as evaluacion_enfermeria_id,
+                em.id as evaluacion_medica_id
             FROM admisiones a 
             JOIN pacientes p ON a.paciente_id = p.id 
+            LEFT JOIN (
+                SELECT admision_id, MAX(id) as id 
+                FROM evaluaciones_enfermeria 
+                GROUP BY admision_id
+            ) ee ON ee.admision_id = a.id
+            LEFT JOIN (
+                SELECT admision_id, MAX(id) as id 
+                FROM evaluaciones_medicas 
+                GROUP BY admision_id
+            ) em ON em.admision_id = a.id
             ORDER BY a.fecha_admision DESC
         `;
 

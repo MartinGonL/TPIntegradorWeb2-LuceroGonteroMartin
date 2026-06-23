@@ -30,8 +30,16 @@ block content
               td 
                 span(class=`badge badge-${admision.estado_admision === 'Activa' ? 'success' : 'secondary'}`)= admision.estado_admision
               td
-                div.d-flex.flex-column.align-items-start
+                div.d-flex.flex-column.align-items-stretch
                   a(href=`/admisiones/${admision.id}` class="btn btn-info btn-sm mb-1") Ver Detalles
+                  if admision.evaluacion_enfermeria_id
+                    a(href=`/evaluaciones-enfermeria/${admision.evaluacion_enfermeria_id}` class="btn btn-success btn-sm mb-1") Eval. Enfermería
+                  else
+                    a(href=`/evaluaciones-enfermeria/admision/${admision.id}/nueva` class="btn btn-outline-secondary btn-sm mb-1") Cargar Enfermería
+                  if admision.evaluacion_medica_id
+                    a(href=`/evaluaciones-medicas/${admision.evaluacion_medica_id}` class="btn btn-primary btn-sm mb-1") Eval. Médica
+                  else
+                    a(href=`/evaluaciones-medicas/admision/${admision.id}/nueva` class="btn btn-outline-secondary btn-sm mb-1") Cargar Médica
                   
   else
     p.mt-3 No se encontraron admisiones en el sistema.
