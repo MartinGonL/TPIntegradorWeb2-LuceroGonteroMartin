@@ -196,3 +196,62 @@ form button:hover {
   display: block;
   margin-bottom: 10px;
 }
+
+/* Anular estilos globales de formulario en celdas de tabla (acciones) */
+table td form {
+    display: inline-block !important;
+    margin: 0 0 0 5px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: auto !important;
+    max-width: none !important;
+}
+
+table td form button.btn {
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+table td form button.btn-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+    border: 1px solid #dc3545 !important;
+}
+
+table td form button.btn-danger:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+
+/* Soporte y corrección para formularios inline en Bootstrap 4 */
+form.form-inline {
+    display: flex !important;
+    flex-flow: row wrap !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+}
+
+form.form-inline button.btn {
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+

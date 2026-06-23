@@ -30,7 +30,7 @@ block content
               td 
                 span(class=`badge badge-${cama.estado_cama === 'Ocupada' ? 'danger' : (cama.estado_cama === 'Libre' || cama.estado_cama === 'Higienizada' ? 'success' : 'warning')}`)= cama.estado_cama
               
-              td
+              td.text-nowrap
                 a(href=`/camas/${cama.id}/edit` class="btn btn-warning btn-sm mr-1") Editar 
                 form(method="POST" action=`/camas/${cama.id}/delete` style="display: inline; margin-left: 5px;")
                   button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro? Eliminar esta cama podría fallar si está ocupada o tiene actividad asociada.');") Eliminar 

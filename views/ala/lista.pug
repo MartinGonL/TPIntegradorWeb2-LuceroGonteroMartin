@@ -22,7 +22,7 @@ block content
               td= ala.id
               td= ala.nombre
               td= ala.descripcion || 'N/A' 
-              td
+              td.text-nowrap
                 a(href=`/alas/${ala.id}/edit` class="btn btn-warning btn-sm mr-1") Editar 
                 form(method="POST" action=`/alas/${ala.id}/delete` style="display: inline; margin-left: 5px;")
                   button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar esta ala? Esto podría fallar si hay habitaciones asociadas.');") Eliminar

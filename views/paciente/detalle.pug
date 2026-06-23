@@ -71,5 +71,5 @@ block content
     if paciente
       a(href=`/pacientes/${paciente.id}/edit` class="btn btn-warning ml-2") Editar Paciente 
       a(href=`/admisiones/nueva?paciente_id=${paciente.id}` class="btn btn-success ml-2") Registrar Admisión 
-      form(method="POST" action=`/pacientes/${paciente.id}/delete` style="display: inline-block; margin-left: 10px;")
+      form(method="POST" action=`/pacientes/${paciente.id}/delete` class="form-inline" style="display: inline-block; margin-left: 10px;")
         button(type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar este paciente?');") Eliminar Paciente 
