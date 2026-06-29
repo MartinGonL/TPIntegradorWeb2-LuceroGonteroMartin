@@ -3,6 +3,7 @@ const Admision = require('../models/admisionModel.js');
 const EvaluacionEnfermeria = require('../models/evaluacionEnfermeriaModel.js');
 const EvaluacionMedica = require('../models/evaluacionMedicaModel.js'); 
 const Usuario = require('../models/usuarioModel.js'); 
+const pool = require('../config/db');
 
 const ESTADOS_ADMISION_VALIDOS = ['Activa', 'Completada', 'Cancelada'];
 
@@ -146,22 +147,49 @@ const AdmisionController = {
         if (!nuevo_estado || !ESTADOS_ADMISION_VALIDOS.includes(nuevo_estado)) {
             const err = new Error('Estado nuevo inválido o faltante.');
             err.status = 400;
-
             return next(err); 
         }
 
+        let conexion;
         try {
-            const filasAfectadas = await Admision.actualizarEstado(id, nuevo_estado);
-            if (filasAfectadas > 0) {
-                res.redirect(`/admisiones/${id}`);
-            } else {
-                const err = new Error('Admisión no encontrada para actualizar estado.');
+            const admision = await Admision.buscarPorId(id);
+            if (!admision) {
+                const err = new Error('Admisión no encontrada.');
                 err.status = 404;
                 return next(err);
             }
+
+            conexion = await pool.getConnection();
+            await conexion.beginTransaction();
+
+            // Si pasa a Completada o Cancelada, liberamos la cama si tiene una asignada
+            if ((nuevo_estado === 'Completada' || nuevo_estado === 'Cancelada') && admision.cama_asignada_id) {
+                // 1. Liberar la cama
+                await conexion.query(
+                    "UPDATE camas SET estado_cama = 'Libre', paciente_actual_id = NULL, admision_actual_id = NULL WHERE id = ?",
+                    [admision.cama_asignada_id]
+                );
+                // 2. Actualizar la admisión y desvincular la cama
+                await conexion.query(
+                    "UPDATE admisiones SET estado_admision = ?, cama_asignada_id = NULL WHERE id = ?",
+                    [nuevo_estado, id]
+                );
+            } else {
+                // Actualización simple de estado
+                await conexion.query(
+                    "UPDATE admisiones SET estado_admision = ? WHERE id = ?",
+                    [nuevo_estado, id]
+                );
+            }
+
+            await conexion.commit();
+            res.redirect(`/admisiones/${id}`);
         } catch (error) {
+            if (conexion) await conexion.rollback();
             console.error('Error al actualizar el estado de la admisión:', error);
             next(error);
+        } finally {
+            if (conexion) conexion.release();
         }
     }
 };

@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg
+  
+  form(method="POST" action=`/usuarios/${usuario.id}/edit`)
+    div.form-group.mt-3
+      label(for="nombre_completo") Nombre Completo: 
+      input(type="text" id="nombre_completo" name="nombre_completo" value=usuario && usuario.nombre_completo ? usuario.nombre_completo : '' required class="form-control" placeholder="Nombre y Apellido")
+
+    div.form-group.mt-3
+      label(for="nombre_usuario") Nombre de Usuario: 
+      input(type="text" id="nombre_usuario" name="nombre_usuario" value=usuario && usuario.nombre_usuario ? usuario.nombre_usuario : '' required class="form-control" placeholder="ej. medico5, admin3")
+
+    div.form-group.mt-3
+      label(for="password") Contraseña: 
+      input(type="password" id="password" name="password" class="form-control" placeholder="Dejar en blanco para mantener la contraseña actual")
+
+    div.form-group.mt-3
+      label(for="rol") Rol en el Sistema: 
+      select#rol.form-control(name="rol" required)
+        option(value="") -- Seleccione el Rol -- 
+        if roles
+          each rolOption in roles
+            option(value=rolOption selected=(usuario && usuario.rol === rolOption)) #{rolOption}
+
+    button(type="submit" class="btn btn-violeta mt-3") Guardar Cambios
+    a(href="/usuarios" class="btn btn-secondary mt-3 ml-2") Cancelar 

@@ -96,9 +96,7 @@ CREATE TABLE `alas` (
 
 INSERT INTO `alas` (`id`, `nombre`, `descripcion`) VALUES
 (1, 'Ala Norte', 'Internación General - Cuidados Básicos'),
-(2, 'Ala Sur', 'Cuidados Críticos y Especialidades'),
-(3, 'Ala Este', 'Pediatría y Maternidad'),
-(4, 'Ala Oeste', 'Unidad de Cuidados Intermedios');
+(2, 'Ala Sur', 'Cuidados Críticos y Especialidades');
 
 -- --------------------------------------------------------
 
@@ -131,19 +129,7 @@ INSERT INTO `camas` (`id`, `habitacion_id`, `codigo_cama`, `estado_cama`, `pacie
 (9, 6, 'Cama-S-102-A', 'Libre', NULL, NULL),
 (10, 6, 'Cama-S-102-B', 'Libre', NULL, NULL),
 (11, 7, 'Cama-S-103', 'Libre', NULL, NULL),
-(12, 8, 'Cama-S-104', 'Libre', NULL, NULL),
-(13, 9, 'Cama-E-101-A', 'Libre', NULL, NULL),
-(14, 9, 'Cama-E-101-B', 'Libre', NULL, NULL),
-(15, 10, 'Cama-E-102-A', 'Libre', NULL, NULL),
-(16, 10, 'Cama-E-102-B', 'Libre', NULL, NULL),
-(17, 11, 'Cama-E-103', 'Libre', NULL, NULL),
-(18, 12, 'Cama-E-104', 'Libre', NULL, NULL),
-(19, 13, 'Cama-O-101-A', 'Libre', NULL, NULL),
-(20, 13, 'Cama-O-101-B', 'Libre', NULL, NULL),
-(21, 14, 'Cama-O-102-A', 'Libre', NULL, NULL),
-(22, 14, 'Cama-O-102-B', 'Libre', NULL, NULL),
-(23, 15, 'Cama-O-103', 'Libre', NULL, NULL),
-(24, 16, 'Cama-O-104', 'Libre', NULL, NULL);
+(12, 8, 'Cama-S-104', 'Libre', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -238,15 +224,7 @@ INSERT INTO `habitaciones` (`id`, `ala_id`, `numero_habitacion`, `tipo`, `capaci
 (5, 2, 'S-101', 'Compartida', 2, 'Habitación compartida en Ala Sur'),
 (6, 2, 'S-102', 'Compartida', 2, 'Habitación compartida en Ala Sur'),
 (7, 2, 'S-103', 'Individual', 1, 'Habitación individual en Ala Sur'),
-(8, 2, 'S-104', 'Individual', 1, 'Habitación individual en Ala Sur'),
-(9, 3, 'E-101', 'Compartida', 2, 'Habitación compartida en Ala Este'),
-(10, 3, 'E-102', 'Compartida', 2, 'Habitación compartida en Ala Este'),
-(11, 3, 'E-103', 'Individual', 1, 'Habitación individual en Ala Este'),
-(12, 3, 'E-104', 'Individual', 1, 'Habitación individual en Ala Este'),
-(13, 4, 'O-101', 'Compartida', 2, 'Habitación compartida en Ala Oeste'),
-(14, 4, 'O-102', 'Compartida', 2, 'Habitación compartida en Ala Oeste'),
-(15, 4, 'O-103', 'Individual', 1, 'Habitación individual en Ala Oeste'),
-(16, 4, 'O-104', 'Individual', 1, 'Habitación individual en Ala Oeste');
+(8, 2, 'S-104', 'Individual', 1, 'Habitación individual en Ala Sur');
 
 -- --------------------------------------------------------
 

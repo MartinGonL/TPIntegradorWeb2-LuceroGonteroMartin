@@ -22,20 +22,32 @@ const AsignacionCamaController = {
             // Filtrar camas por sexo de habitación (Lógica de Negocio)
             const camasDisponibles = [];
             for (const cama of camasDisponiblesRaw) {
-                // Obtener sexos de pacientes en la misma habitación
+                // Obtener sexos de pacientes en la misma habitación (consulta combinada y robusta)
                 let conexion;
                 try {
                     conexion = await pool.getConnection();
                     const [ocupantes] = await conexion.query(
-                        `SELECT p.sexo 
-                         FROM camas c 
-                         JOIN pacientes p ON c.paciente_actual_id = p.id 
-                         WHERE c.habitacion_id = ? AND c.estado_cama = 'Ocupada'`,
-                        [cama.habitacion_id]
+                        `SELECT DISTINCT p.sexo 
+                         FROM pacientes p
+                         WHERE p.id IN (
+                             SELECT paciente_actual_id 
+                             FROM camas 
+                             WHERE habitacion_id = ? AND estado_cama = 'Ocupada' AND paciente_actual_id IS NOT NULL
+                             
+                             UNION
+                             
+                             SELECT a.paciente_id 
+                             FROM admisiones a
+                             JOIN camas c ON a.cama_asignada_id = c.id
+                             WHERE c.habitacion_id = ? AND a.estado_admision = 'Activa' AND a.paciente_id IS NOT NULL
+                         )`,
+                        [cama.habitacion_id, cama.habitacion_id]
                     );
 
-                    // Si la habitación está vacía o todos son del mismo sexo
-                    const mismoSexo = ocupantes.every(o => o.sexo === paciente.sexo);
+                    // Si la habitación está vacía o todos son del mismo sexo (comparación normalizada)
+                    const mismoSexo = ocupantes.every(o => 
+                        o.sexo && paciente.sexo && o.sexo.trim().toLowerCase() === paciente.sexo.trim().toLowerCase()
+                    );
                     if (ocupantes.length === 0 || mismoSexo) {
                         camasDisponibles.push(cama);
                     }
@@ -78,14 +90,26 @@ const AsignacionCamaController = {
             // Validar sexo nuevamente por seguridad (concurrencia)
             conexion = await pool.getConnection();
             const [ocupantes] = await conexion.query(
-                `SELECT p.sexo 
-                 FROM camas c 
-                 JOIN pacientes p ON c.paciente_actual_id = p.id 
-                 WHERE c.habitacion_id = ? AND c.estado_cama = 'Ocupada'`,
-                [cama.habitacion_id]
+                `SELECT DISTINCT p.sexo 
+                 FROM pacientes p
+                 WHERE p.id IN (
+                     SELECT paciente_actual_id 
+                     FROM camas 
+                     WHERE habitacion_id = ? AND estado_cama = 'Ocupada' AND paciente_actual_id IS NOT NULL
+                     
+                     UNION
+                     
+                     SELECT a.paciente_id 
+                     FROM admisiones a
+                     JOIN camas c ON a.cama_asignada_id = c.id
+                     WHERE c.habitacion_id = ? AND a.estado_admision = 'Activa' AND a.paciente_id IS NOT NULL
+                 )`,
+                [cama.habitacion_id, cama.habitacion_id]
             );
 
-            const mismoSexo = ocupantes.every(o => o.sexo === paciente.sexo);
+            const mismoSexo = ocupantes.every(o => 
+                o.sexo && paciente.sexo && o.sexo.trim().toLowerCase() === paciente.sexo.trim().toLowerCase()
+            );
             if (ocupantes.length > 0 && !mismoSexo) {
                 throw new Error('La habitación seleccionada tiene pacientes de otro sexo.');
             }

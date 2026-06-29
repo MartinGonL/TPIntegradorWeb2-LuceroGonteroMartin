@@ -11,6 +11,7 @@ const camaRoutes = require('./routes/camaRoute');             // Requerir rutas 
 const asignacionCamaRoutes = require('./routes/asignacionCamaRoute.js'); // Requerir rutas de asignación de camas
 const evaluacionEnfermeriaRoutes = require('./routes/evaluacionEnfermeriaRoute.js'); // Requerir rutas de evaluación de enfermería
 const evaluacionMedicaRoutes = require('./routes/evaluacionMedicaRoute.js');     // Requerir rutas de evaluación médica
+const usuarioRoutes = require('./routes/usuarioRoute');             // Requerir rutas de gestión de usuarios
 const { requerirLogin, permitirRoles } = require('./middlewares/authMiddleware'); // Requerir middlewares de protección
 
 dotenv.config();
@@ -58,6 +59,7 @@ app.use('/alas', permitirRoles(['Admin']), alaRoutes);
 app.use('/habitaciones', permitirRoles(['Admin']), habitacionRoutes);
 app.use('/camas', permitirRoles(['Admin']), camaRoutes);
 app.use('/asignaciones-cama', permitirRoles(['Admin']), asignacionCamaRoutes);
+app.use('/usuarios', permitirRoles(['Admin']), usuarioRoutes);
 app.use('/evaluaciones-enfermeria', permitirRoles(['Admin', 'Enfermero']), evaluacionEnfermeriaRoutes);
 app.use('/evaluaciones-medicas', permitirRoles(['Admin', 'Medico']), evaluacionMedicaRoutes);
 

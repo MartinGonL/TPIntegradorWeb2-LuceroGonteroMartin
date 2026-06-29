@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+  h1 #{title} 
+
+  if errors && errors.length > 0
+    div.alert.alert-danger.mt-3
+      h4 Errores: 
+      ul
+        each error in errors
+          li= error.msg
+
+  p
+    a(href="/usuarios/nuevo" class="btn btn-violeta mb-3") Crear Nuevo Usuario
+  
+  hr
+
+  if usuarios && usuarios.length > 0
+    div.table-responsive
+      table.table.table-striped.table-hover.table-bordered
+        thead.thead-dark
+          tr
+            th Nombre Completo
+            th Nombre de Usuario
+            th Rol
+            th Acciones
+        tbody
+          each usr in usuarios
+            tr
+              td= usr.nombre_completo
+              td= usr.nombre_usuario
+              td= usr.rol
+              td.text-nowrap
+                a(href=`/usuarios/${usr.id}/edit` class="btn btn-warning btn-sm mr-1") Editar 
+                form(method="POST" action=`/usuarios/${usr.id}/delete` style="display: inline; margin-left: 5px;")
+                  button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este usuario?');") Eliminar 
+  else
+    p.mt-3 No se encontraron usuarios registrados. 
+      a(href="/usuarios/nuevo") ¡Crear uno! 

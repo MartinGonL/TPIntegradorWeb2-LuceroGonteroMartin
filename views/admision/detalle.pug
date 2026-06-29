@@ -58,14 +58,13 @@ block content
   // Contenedor flex para alinear y separar los botones
   div.mt-3.d-flex.flex-wrap.gap-2.botones-admision
   if admision && admision.estado_admision === 'Activa'
-    form(method="POST" action=`/asignaciones-cama/admision/${admision.id}/liberar-cama` style="display:contents;")
-      button.btn.btn-violeta.w-100(type="submit" onclick="return confirm('¿Está seguro de que desea liberar la cama para esta admisión?');") Liberar Cama
-    // Salto de línea
-    div.w-100
-
-    // Segunda fila de botones, todos con flex-grow
     div.d-flex.flex-row.flex-grow-1.w-100
-      a.btn.btn-violeta.flex-fill.mr-2(href=`/asignaciones-cama/admision/${admision.id}/asignar-cama/ui`) Asignar Cama 
+      if admision.cama_asignada_id
+        form(method="POST" action=`/asignaciones-cama/admision/${admision.id}/liberar-cama` style="display:contents;")
+          button.btn.btn-violeta.flex-fill.mr-2(type="submit" onclick="return confirm('¿Está seguro de que desea liberar la cama para esta admisión?');") Liberar Cama
+      else
+        a.btn.btn-violeta.flex-fill.mr-2(href=`/asignaciones-cama/admision/${admision.id}/asignar-cama/ui`) Asignar Cama 
+
       if paciente && paciente.id
         a.btn.btn-violeta.flex-fill.mr-2(href=`/pacientes/${paciente.id}`) Volver a Detalles del Paciente 
       else if admision && admision.paciente_id
