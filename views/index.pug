@@ -1,41 +1,57 @@
 extends layout
 
 block content
-  .container.mt-5
+  .container.mt-4
     .row.justify-content-center
       .col-md-12
-        h1.text-center.mb-4 #{title}
-        p.text-center Bienvenido, #{usuario.nombre_completo} (#{usuario.rol}).
-        .row.g-4
-          .col-md-6.col-lg-3
-            a(href="/pacientes/nuevo", class="card text-center menu-card mb-4 btn-violeta")
+        h1.text-center.mb-3(style="color: #4e058a; font-weight: bold;") #{title}
+        p.text-center.mb-5(style="font-size: 1.15rem; color: #555;") Bienvenido, #{usuario.nombre_completo} (#{usuario.rol}).
+        
+        // Sección: Operaciones Clínicas
+        h3.mb-4(style="color: #6a1b9a; font-weight: bold; font-size: 1.4rem; border-bottom: 2px solid rgba(124,58,237,0.15); padding-bottom: 8px;") Gestión de Pacientes y Admisiones
+        .row.mb-5
+          .col-md-3
+            a(href="/pacientes/nuevo", class="card text-center menu-card btn-violeta")
               .card-body
-                i.fas.fa-user-plus.fa-2x.mb-2
+                i.fas.fa-user-plus.fa-2x.mb-3
                 h5.card-title Registrar Nuevo Paciente
-          .col-md-6.col-lg-3
-            a(href="/pacientes", class="card text-center menu-card mb-4 btn-violeta")
+          .col-md-3
+            a(href="/pacientes", class="card text-center menu-card btn-violeta")
               .card-body
-                i.fas.fa-users.fa-2x.mb-2
+                i.fas.fa-users.fa-2x.mb-3
                 h5.card-title Ver Todos los Pacientes
-          .col-md-6.col-lg-3
-            a(href="/admisiones", class="card text-center menu-card mb-4 btn-violeta")
+          .col-md-3
+            a(href="/pacientes-urgencia", class="card text-center menu-card btn-violeta")
               .card-body
-                i.fas.fa-notes-medical.fa-2x.mb-2
+                i.fas.fa-ambulance.fa-2x.mb-3
+                h5.card-title Pacientes de Urgencia
+          .col-md-3
+            a(href="/admisiones", class="card text-center menu-card btn-violeta")
+              .card-body
+                i.fas.fa-notes-medical.fa-2x.mb-3
                 h5.card-title Ver Todas las Admisiones
 
-          if usuario.rol === 'Admin'
-            .col-md-6.col-lg-3
-              a(href="/alas", class="card text-center menu-card mb-4 btn-violeta")
+        // Sección: Administración (Solo para Admin)
+        if usuario.rol === 'Admin'
+          h3.mb-4(style="color: #6a1b9a; font-weight: bold; font-size: 1.4rem; border-bottom: 2px solid rgba(124,58,237,0.15); padding-bottom: 8px;") Configuración y Gestión de Infraestructura
+          .row
+            .col-md-3
+              a(href="/alas", class="card text-center menu-card btn-violeta")
                 .card-body
-                  i.fas.fa-hotel.fa-2x.mb-2
+                  i.fas.fa-hotel.fa-2x.mb-3
                   h5.card-title Gestionar Alas
-            .col-md-6.col-lg-3
-              a(href="/habitaciones", class="card text-center menu-card mb-4 btn-violeta")
+            .col-md-3
+              a(href="/habitaciones", class="card text-center menu-card btn-violeta")
                 .card-body
-                  i.fas.fa-door-open.fa-2x.mb-2
+                  i.fas.fa-door-open.fa-2x.mb-3
                   h5.card-title Gestionar Habitaciones
-            .col-md-6.col-lg-3
-              a(href="/camas", class="card text-center menu-card mb-4 btn-violeta")
+            .col-md-3
+              a(href="/camas", class="card text-center menu-card btn-violeta")
                 .card-body
-                  i.fas.fa-bed.fa-2x.mb-2
+                  i.fas.fa-bed.fa-2x.mb-3
                   h5.card-title Gestionar Camas
+            .col-md-3
+              a(href="/usuarios", class="card text-center menu-card btn-violeta")
+                .card-body
+                  i.fas.fa-users-cog.fa-2x.mb-3
+                  h5.card-title Gestionar Usuarios

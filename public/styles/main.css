@@ -170,12 +170,12 @@ form button:hover {
 .menu-card {
   background-color: #7c3aed;
   color: #fff !important;
-  border: 2px solid #5b21b6;
-  border-radius: 12px;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 12px rgba(124,58,237,0.08);
+  border: none;
+  border-radius: 14px;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.12);
   cursor: pointer;
-  min-height: 160px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  h1 #{title}
+  
+  div.d-flex.justify-content-end.mb-3
+    a.btn.btn-violeta(href="/pacientes-urgencia/nuevo") Registrar Paciente de Urgencia
+  hr
+
+  if urgencias && urgencias.length > 0
+    div.table-responsive
+      table.table.table-striped.table-hover.table-bordered
+        thead.thead-dark
+          tr
+            th Nombre
+            th Fecha y Hora
+            th Observación
+            th Acciones
+        tbody
+          each urg in urgencias
+            tr
+              td= urg.nombre
+              td= urg.fecha_hora ? new Date(urg.fecha_hora).toLocaleString('es-AR') : 'N/A'
+              td= urg.observacion
+              td
+                div.d-flex.flex-column
+                  a(href=`/pacientes-urgencia/${urg.id}/actualizar` class="btn btn-warning btn-sm mb-1") Actualizar datos
+                  form(method="POST" action=`/pacientes-urgencia/${urg.id}/eliminar` style="display: inline;")
+                    button(type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar esta urgencia?');") Eliminar
+  else
+    p.mt-3 No se encontraron pacientes de urgencia registrados. 
+      a(href="/pacientes-urgencia/nuevo") ¡Registrar uno!

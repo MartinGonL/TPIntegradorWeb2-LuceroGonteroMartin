@@ -1,22 +1,22 @@
 extends ../layout
 
 block content
-  .container.mt-5
+  .container.mt-4
     .row.justify-content-center
-      .col-sm-10.col-md-9.col-lg-7
-        .card.shadow
-          .card-header.bg-primary.text-white
-            h4.text-center.mb-0(style="font-size: 2.2rem; padding: 0.5rem 0;") Iniciar Sesión
-          .card-body.p-5
+      .col-12
+        .card.shadow-sm(style="max-width: 500px; margin: 0 auto; border-radius: 12px; border: none; box-shadow: 0 8px 30px rgba(78, 5, 138, 0.12) !important;")
+          .card-header.text-white.text-center.py-4(style="background-color: #4e058a !important; border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom: none;")
+            h4.mb-0(style="font-size: 1.75rem; font-weight: bold; letter-spacing: 0.5px;") Iniciar Sesión
+          .card-body.p-4.p-md-5
             if errors
-              .alert.alert-danger(style="font-size: 1.5rem;")
+              .alert.alert-danger(style="font-size: 1.1rem; border-radius: 8px;")
                 each error in errors
                   p.mb-0= error.msg
             form(method="POST" action="/auth/login" style="border: none; padding: 0; box-shadow: none; background: none; max-width: 100%;")
               .form-group.mb-4
-                label(for="nombre_usuario" style="font-size: 1.8rem; font-weight: bold;") Nombre de Usuario:
-                input.form-control(type="text" id="nombre_usuario" name="nombre_usuario" required value=(nombre_usuario || '') style="height: 70px; font-size: 1.8rem; padding: 1rem 1.5rem;")
+                label(for="nombre_usuario" style="font-size: 1.1rem; font-weight: 600; color: #555; margin-bottom: 8px;") Nombre de Usuario:
+                input.form-control(type="text" id="nombre_usuario" name="nombre_usuario" required value=(nombre_usuario || '') style="height: 52px; font-size: 1.15rem; border-radius: 8px; border: 1px solid #ced4da; padding: 0.75rem 1.25rem;")
               .form-group.mb-4
-                label(for="password" style="font-size: 1.8rem; font-weight: bold;") Contraseña:
-                input.form-control(type="password" id="password" name="password" required style="height: 70px; font-size: 1.8rem; padding: 1rem 1.5rem;")
-              button.btn.btn-primary.btn-block.mt-5(type="submit" style="height: 75px; font-size: 2rem; font-weight: bold;") Ingresar
+                label(for="password" style="font-size: 1.1rem; font-weight: 600; color: #555; margin-bottom: 8px;") Contraseña:
+                input.form-control(type="password" id="password" name="password" required style="height: 52px; font-size: 1.15rem; border-radius: 8px; border: 1px solid #ced4da; padding: 0.75rem 1.25rem;")
+              button.btn.btn-violeta.btn-block.mt-4(type="submit" style="height: 54px; font-size: 1.25rem; font-weight: bold; border-radius: 8px;") Ingresar

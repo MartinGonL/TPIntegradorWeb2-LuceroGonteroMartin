@@ -12,6 +12,7 @@ const asignacionCamaRoutes = require('./routes/asignacionCamaRoute.js'); // Requ
 const evaluacionEnfermeriaRoutes = require('./routes/evaluacionEnfermeriaRoute.js'); // Requerir rutas de evaluación de enfermería
 const evaluacionMedicaRoutes = require('./routes/evaluacionMedicaRoute.js');     // Requerir rutas de evaluación médica
 const usuarioRoutes = require('./routes/usuarioRoute');             // Requerir rutas de gestión de usuarios
+const pacienteUrgenciaRoutes = require('./routes/pacienteUrgenciaRoute'); // Requerir rutas de pacientes de urgencia
 const { requerirLogin, permitirRoles } = require('./middlewares/authMiddleware'); // Requerir middlewares de protección
 
 dotenv.config();
@@ -62,6 +63,7 @@ app.use('/asignaciones-cama', permitirRoles(['Admin']), asignacionCamaRoutes);
 app.use('/usuarios', permitirRoles(['Admin']), usuarioRoutes);
 app.use('/evaluaciones-enfermeria', permitirRoles(['Admin', 'Enfermero']), evaluacionEnfermeriaRoutes);
 app.use('/evaluaciones-medicas', permitirRoles(['Admin', 'Medico']), evaluacionMedicaRoutes);
+app.use('/pacientes-urgencia', permitirRoles(['Admin', 'Medico', 'Enfermero']), pacienteUrgenciaRoutes);
 
 app.use((req, res, next) => {
     res.status(404).render('404', { title: 'Página No Encontrada' }); 

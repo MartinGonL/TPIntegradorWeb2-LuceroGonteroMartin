@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  h1.text-center #{title}
+
+  .container(style="max-width: 600px; margin-top: 30px;")
+    if error
+      .alert.alert-danger= error
+
+    form(method="POST" action="/pacientes-urgencia")
+      .form-group
+        label(for="nombre") Nombre:
+        input.form-control(type="text" id="nombre" name="nombre" value="Paciente Urgencia" required)
+      
+      .form-group
+        label(for="fecha_hora") Fecha y Hora:
+        input.form-control(type="datetime-local" id="fecha_hora" name="fecha_hora" required)
+        
+      .form-group
+        label(for="observacion") Observación:
+        textarea.form-control(id="observacion" name="observacion" rows="4" placeholder="Ingrese los detalles de la urgencia..." required)
+
+      button(type="submit" class="btn btn-primary mt-3 btn-block") Registrar Urgencia
+      a.btn.btn-secondary.btn-block.mt-2(href="/pacientes-urgencia") Cancelar
+
+  script.
+    // Inicializar el campo de fecha y hora con la hora local actual en formato YYYY-MM-DDTHH:MM
+    window.addEventListener('DOMContentLoaded', () => {
+      const ahora = new Date();
+      const tzOffset = ahora.getTimezoneOffset() * 60000; // offset en ms
+      const fechaLocal = new Date(ahora - tzOffset).toISOString().slice(0, 16);
+      document.getElementById('fecha_hora').value = fechaLocal;
+    });

@@ -18,6 +18,7 @@ html(lang="es")
           li: a(href="/contacto") Contacto
           if usuario
             li: a(href="/pacientes") Pacientes
+            li: a(href="/pacientes-urgencia") Pacientes de Urgencia
             li: a(href="/admisiones") Admisiones
             if usuario.rol === 'Admin'
               li: a(href="/alas") Alas

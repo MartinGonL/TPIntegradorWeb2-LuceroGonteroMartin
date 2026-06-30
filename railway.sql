@@ -258,6 +258,18 @@ INSERT INTO `pacientes` (`id`, `nombre`, `apellido`, `sexo`, `dni`, `fechaNacimi
 (8, 'emilia', 'lucero', 'Femenino', '54162571', '2015-08-15', '2664404040', 'martingontero@hotmail.com', 'lic 22 mzn 1 casa 4', 'La Punta', 'San Luis', '5710');
 
 --
+-- Estructura de tabla para la tabla `pacientes_urgencia`
+--
+
+CREATE TABLE `pacientes_urgencia` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `fecha_hora` datetime NOT NULL,
+  `observacion` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Índices para tablas volcadas
 --
 

@@ -42,16 +42,16 @@ const PacienteController = {
          errores.push({ param: 'provincia', msg: 'Seleccione una provincia válida.' });
 
         if (errores.length > 0) {    
-        const erroresObj = errores.reduce((obj, error) => {
-        obj[error.param] = error;
-        return obj;
-        }, {});
+            const erroresObj = errores.reduce((obj, error) => {
+                obj[error.param] = error;
+                return obj;
+            }, {});
 
-        return res.status(400).render('paciente/nuevo', {
-        title: 'Registrar Nuevo Paciente',
-        errors: erroresObj, 
-        paciente: datosPaciente
-        });
+            return res.status(400).render('paciente/nuevo', {
+                title: 'Registrar Nuevo Paciente',
+                errors: erroresObj, 
+                paciente: datosPaciente
+            });
         }
 
         try {
@@ -65,7 +65,6 @@ const PacienteController = {
                 errors: [{ msg: 'Error al guardar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe, no podrá duplicarlo.' }],
                 paciente: datosPaciente
             });
-
         }
     },
 
@@ -222,38 +221,5 @@ const PacienteController = {
             next(error);
         }
     },
-
-async generarPacienteAutomatico(req, res, next) {
-    try {        
-        const dni = Math.floor(10000000 + Math.random() * 90000000);
-        const existe = await Paciente.buscarPorDni(dni);
-        if (existe) {            
-            return res.status(400).json({ error: "El DNI generado ya está en uso" });
-        }
-
-        const datosAutomaticos = {
-            nombre: "Paciente",
-            apellido: "Automático",
-            sexo: "Masculino",
-            dni: dni, 
-            fechaNacimiento: "1990-01-01",
-            telefono: "123456789",
-            email: `auto${Date.now()}@example.com`,
-            domicilio: "Calle Ficticia 123",
-            localidad: "Ciudad Automática",
-            provincia: "Buenos Aires",
-            cp: "1234"
-        };
-
-        const idPaciente = await Paciente.insertar(datosAutomaticos);
-        
-        const pacienteGenerado = await Paciente.buscarPorId(idPaciente);
-        res.json(pacienteGenerado);
-        
-    } catch (error) {
-        console.error("Error al generar paciente automático:", error);
-        res.status(500).json({ error: "No se pudo generar el paciente" });
-    }
-}
 }
 module.exports = PacienteController;
