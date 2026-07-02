@@ -4,6 +4,15 @@ block content
   h1 #{title} 
 
 
+  if errors
+    .alert.alert-danger
+      ul.mb-0
+        if errors.general
+          li= errors.general.msg
+        else
+          each error in Object.values(errors)
+            li= error.msg
+
   if paciente
     form(method="POST" action=`/pacientes/${paciente.id}/actualizar`)
 

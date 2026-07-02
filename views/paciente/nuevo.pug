@@ -4,6 +4,8 @@ block content
   h1.text-center #{title}
 
   .container
+    if errors && errors.general
+      .alert.alert-danger= errors.general.msg
     form(method="POST" action="/pacientes")
       .form-row
         .form-group.col-md-6

@@ -74,11 +74,11 @@ block content
 
       if evaluacionEnfermeria 
         a.btn.btn-violeta.flex-fill.mr-2(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}`) Ver Evaluación Enfermería 
-      else
+      else if usuario.rol === 'Admin' || usuario.rol === 'Enfermero'
         a.btn.btn-violeta.flex-fill.mr-2(href=`/evaluaciones-enfermeria/admision/${admision.id}/nueva`) Registrar Evaluación Enfermería 
 
       if evaluacionesMedicas && evaluacionesMedicas.length > 0
         a.btn.btn-violeta.flex-fill(href=`/evaluaciones-medicas/${evaluacionesMedicas[0].id}`) Ver Evaluación(es) Médica(s) 
-      else
+      else if usuario.rol === 'Admin' || usuario.rol === 'Medico'
         a.btn.btn-violeta.flex-fill(href=`/evaluaciones-medicas/admision/${admision.id}/nueva`) Registrar Evaluación Médica
         

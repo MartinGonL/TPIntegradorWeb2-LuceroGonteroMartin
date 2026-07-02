@@ -39,9 +39,42 @@ const CamaController = {
 
         const errores = []; 
         if (!habitacion_id) errores.push({ msg: 'El campo Habitación es obligatorio.' });
-        if (!codigo_cama || codigo_cama.trim() === '') errores.push({ msg: 'El campo Código de Cama es obligatorio.' });
+        if (!codigo_cama || codigo_cama.trim() === '') {
+            errores.push({ msg: 'El campo Código de Cama es obligatorio.' });
+        }
+
+        let codigoNormalizado = codigo_cama ? codigo_cama.trim() : '';
+
         if (datosCama.estado_cama && !ESTADOS_CAMA_VALIDOS.includes(datosCama.estado_cama)) {
             errores.push({ msg: 'El estado de la cama proporcionado no es válido.' });
+        }
+
+        if (habitacion_id && errores.length === 0) {
+            try {
+                const habitacion = await Habitacion.obtenerPorId(habitacion_id);
+                if (!habitacion) {
+                    errores.push({ msg: 'La habitación seleccionada no existe.' });
+                } else {
+                    const camasExistentes = await Cama.listarPorIdHabitacion(habitacion_id);
+                    if (camasExistentes.length >= habitacion.capacidad) {
+                        errores.push({ msg: `La habitación seleccionada ya cubrió su capacidad máxima de camas (${habitacion.capacidad}).` });
+                    }
+
+                    if (codigoNormalizado !== '' && errores.length === 0) {
+                        const habitacionNombre = habitacion.numero_habitacion.toUpperCase(); // Ej: "N-101"
+                        const codigoIngresado = codigoNormalizado.toUpperCase();             // Ej: "N-101A"
+
+                        if (!codigoIngresado.startsWith(habitacionNombre)) {
+                            errores.push({ msg: `El código de la cama debe comenzar con el número de la habitación seleccionada (${habitacion.numero_habitacion}). Ejemplo: ${habitacion.numero_habitacion}A` });
+                        } else {
+                            datosCama.codigo_cama = codigoNormalizado.toUpperCase();
+                        }
+                    }
+                }
+            } catch (errDb) {
+                console.error('Error al validar habitación durante creación:', errDb);
+                errores.push({ msg: 'Error al consultar datos de la habitación en la base de datos.' });
+            }
         }
 
         if (errores.length > 0) {
@@ -65,7 +98,7 @@ const CamaController = {
             res.redirect('/camas'); 
         } catch (error) {
             console.error('Error al crear la cama:', error);
-            errores.push({ msg: 'Error al crear la cama. El código de cama ya podría existir en la habitación seleccionada o ocurrió un error en la base de datos.' });
+            errores.push({ msg: 'Nombre ya existente.' });
             try {
                 const habitaciones = await Habitacion.listarTodas();
                 res.status(500).render('cama/nueva', {
@@ -111,9 +144,58 @@ const CamaController = {
 
         const errores = [];
         if (!habitacion_id) errores.push({ msg: 'El campo Habitación es obligatorio.' });
-        if (!codigo_cama || codigo_cama.trim() === '') errores.push({ msg: 'El campo Código de Cama es obligatorio.' });
+        if (!codigo_cama || codigo_cama.trim() === '') {
+            errores.push({ msg: 'El campo Código de Cama es obligatorio.' });
+        }
+
+        let codigoNormalizado = codigo_cama ? codigo_cama.trim() : '';
+
+        if (codigoNormalizado !== '') {
+            const regexCama = /^Cama-[NSns]-\d+(?:-[A-Za-z])?$/i;
+            if (!regexCama.test(codigoNormalizado)) {
+                errores.push({ msg: 'El Código de Cama debe tener un formato válido, ej. Cama-N-101-A o Cama-N-103.' });
+            }
+        }
+
         if (estado_cama && !ESTADOS_CAMA_VALIDOS.includes(estado_cama)) {
             errores.push({ msg: 'El estado de la cama proporcionado no es válido.' });
+        }
+
+        if (habitacion_id && errores.length === 0) {
+            try {
+                const habitacion = await Habitacion.obtenerPorId(habitacion_id);
+                if (!habitacion) {
+                    errores.push({ msg: 'La habitación seleccionada no existe.' });
+                } else {
+                    const camasExistentes = await Cama.listarPorIdHabitacion(habitacion_id);
+                    const camasEnHabitacion = camasExistentes.filter(c => c.id !== parseInt(id));
+                    if (camasEnHabitacion.length >= habitacion.capacidad) {
+                        errores.push({ msg: `La habitación seleccionada ya cubrió su capacidad máxima de camas (${habitacion.capacidad}).` });
+                    }
+
+                    if (codigoNormalizado !== '' && errores.length === 0) {
+                        const partes = codigoNormalizado.split('-');
+                        const prefijo = 'Cama';
+                        const alaInicial = partes[1].toUpperCase();
+                        const habitacionNum = partes[2];
+                        const letra = partes[3] ? `-${partes[3].toUpperCase()}` : '';
+
+                        const habitacionCodigo = `${alaInicial}-${habitacionNum}`;
+
+                        if (habitacionCodigo.toUpperCase() !== habitacion.numero_habitacion.toUpperCase()) {
+                            errores.push({ msg: `El código de la cama (${codigoNormalizado}) debe corresponder a la habitación seleccionada (${habitacion.numero_habitacion}).` });
+                        }
+
+                        if (errores.length === 0) {
+                            codigoNormalizado = `${prefijo}-${alaInicial}-${habitacionNum}${letra}`;
+                            datosCamaForm.codigo_cama = codigoNormalizado;
+                        }
+                    }
+                }
+            } catch (errDb) {
+                console.error('Error al validar habitación durante actualización:', errDb);
+                errores.push({ msg: 'Error al consultar datos de la habitación en la base de datos.' });
+            }
         }
         
         if (errores.length > 0) {
@@ -132,19 +214,19 @@ const CamaController = {
             }
         }
         
-        const datosCamaActualizar = { habitacion_id, codigo_cama, estado_cama };
+        const datosCamaActualizar = { habitacion_id, codigo_cama: datosCamaForm.codigo_cama || codigo_cama, estado_cama };
         try {
             const filasAfectadas = await Cama.actualizar(id, datosCamaActualizar); 
             if (filasAfectadas > 0) {
                 res.redirect('/camas');
             } else {
                 const err = new Error('Cama no encontrada o ningún dato modificado durante la actualización.');
-                err.status = 404;
+                err.status = 404; 
                 return next(err);
             }
         } catch (error) {
             console.error('Error al actualizar la cama:', error);
-            errores.push({ msg: 'Error al actualizar la cama. El código de cama ya podría existir en la habitación seleccionada o ocurrió un error en la base de datos.' });
+            errores.push({ msg: 'Nombre ya existente.' });
             try {
                 const habitaciones = await Habitacion.listarTodas();
                 res.status(500).render('cama/editar', {

@@ -32,11 +32,11 @@ block content
                   a(href=`/admisiones/${admision.id}` class="btn btn-info btn-sm mb-1") Ver Detalles
                   if admision.evaluacion_enfermeria_id
                     a(href=`/evaluaciones-enfermeria/${admision.evaluacion_enfermeria_id}` class="btn btn-success btn-sm mb-1") Eval. Enfermería
-                  else
+                  else if usuario.rol === 'Admin' || usuario.rol === 'Enfermero'
                     a(href=`/evaluaciones-enfermeria/admision/${admision.id}/nueva` class="btn btn-outline-secondary btn-sm mb-1") Cargar Enfermería
                   if admision.evaluacion_medica_id
                     a(href=`/evaluaciones-medicas/${admision.evaluacion_medica_id}` class="btn btn-primary btn-sm mb-1") Eval. Médica
-                  else
+                  else if usuario.rol === 'Admin' || usuario.rol === 'Medico'
                     a(href=`/evaluaciones-medicas/admision/${admision.id}/nueva` class="btn btn-outline-secondary btn-sm mb-1") Cargar Médica
                   
   else

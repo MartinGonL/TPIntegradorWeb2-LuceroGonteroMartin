@@ -29,7 +29,8 @@ block content
         p.card-text #[strong Fecha Evaluación Enf.:] #{evaluacionEnfermeria.fecha_evaluacion ? new Date(evaluacionEnfermeria.fecha_evaluacion).toLocaleString() : 'N/A'} 
         p.card-text
           a.btn.btn-violeta.btn-sm.mr-2(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}`) Ver Detalle de Evaluación de Enfermería 
-          a.btn.btn-violeta.btn-sm(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}/editar`) Editar Evaluación de Enfermería 
+          if usuario.rol === 'Admin' || usuario.rol === 'Enfermero'
+            a.btn.btn-violeta.btn-sm(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}/editar`) Editar Evaluación de Enfermería 
 
   // Detalles de la Evaluación Médica
   if evaluacionMedica
@@ -83,5 +84,5 @@ block content
     else
       a(href="/admisiones" class="btn btn-secondary") Volver a Lista de Admisiones 
     
-    if evaluacionMedica && evaluacionMedica.id && admision && admision.estado_admision === 'Activa'
+    if (usuario.rol === 'Admin' || usuario.rol === 'Medico') && evaluacionMedica && evaluacionMedica.id && admision && admision.estado_admision === 'Activa'
       a(href=`/evaluaciones-medicas/${evaluacionMedica.id}/edit` class="btn btn-warning ml-2") Editar Evaluación Médica 

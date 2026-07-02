@@ -26,7 +26,7 @@ const AsignacionCamaController = {
                 let conexion;
                 try {
                     conexion = await pool.getConnection();
-                    const [ocupantes] = await conexion.query(
+                    const [ocupantes] = await conexion.query( //se crea la variable de ocupantes
                         `SELECT DISTINCT p.sexo 
                          FROM pacientes p
                          WHERE p.id IN (
@@ -41,7 +41,7 @@ const AsignacionCamaController = {
                              JOIN camas c ON a.cama_asignada_id = c.id
                              WHERE c.habitacion_id = ? AND a.estado_admision = 'Activa' AND a.paciente_id IS NOT NULL
                          )`,
-                        [cama.habitacion_id, cama.habitacion_id]
+                        [cama.habitacion_id, cama.habitacion_id] //envia los valores a la consulta de la query
                     );
 
                     // Si la habitación está vacía o todos son del mismo sexo (comparación normalizada)

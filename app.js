@@ -61,8 +61,8 @@ app.use('/habitaciones', permitirRoles(['Admin']), habitacionRoutes);
 app.use('/camas', permitirRoles(['Admin']), camaRoutes);
 app.use('/asignaciones-cama', permitirRoles(['Admin']), asignacionCamaRoutes);
 app.use('/usuarios', permitirRoles(['Admin']), usuarioRoutes);
-app.use('/evaluaciones-enfermeria', permitirRoles(['Admin', 'Enfermero']), evaluacionEnfermeriaRoutes);
-app.use('/evaluaciones-medicas', permitirRoles(['Admin', 'Medico']), evaluacionMedicaRoutes);
+app.use('/evaluaciones-enfermeria', permitirRoles(['Admin', 'Enfermero', 'Medico']), evaluacionEnfermeriaRoutes);
+app.use('/evaluaciones-medicas', permitirRoles(['Admin', 'Medico', 'Enfermero']), evaluacionMedicaRoutes);
 app.use('/pacientes-urgencia', permitirRoles(['Admin', 'Medico', 'Enfermero']), pacienteUrgenciaRoutes);
 
 app.use((req, res, next) => {

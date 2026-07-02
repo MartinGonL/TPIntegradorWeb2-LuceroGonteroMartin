@@ -23,8 +23,18 @@ const PacienteController = {
         if (!sexo || !sexosValidos.includes(sexo))
          errores.push({ param: 'sexo', msg: 'Seleccione un sexo válido.' });
 
-        if (!dni || !/^\d{7,8}$/.test(dni))
+        if (!dni || !/^\d{7,8}$/.test(dni)) {
          errores.push({ param: 'dni', msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+        } else {
+            try {
+                const pacienteExistente = await Paciente.buscarPorDni(dni);
+                if (pacienteExistente) {
+                    errores.push({ param: 'dni', msg: 'El DNI ingresado ya se encuentra registrado.' });
+                }
+            } catch (errDb) {
+                console.error('Error al validar DNI duplicado:', errDb);
+            }
+        }
 
         if (!fechaNacimiento || isNaN(Date.parse(fechaNacimiento)) || new Date(fechaNacimiento) >= new Date())
          errores.push({ param: 'fechaNacimiento', msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
@@ -62,7 +72,9 @@ const PacienteController = {
   
             return res.status(500).render('paciente/nuevo', {
                 title: 'Registrar Nuevo Paciente',
-                errors: [{ msg: 'Error al guardar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe, no podrá duplicarlo.' }],
+                errors: {
+                    general: { msg: 'Error al guardar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe, no podrá duplicarlo.' }
+                },
                 paciente: datosPaciente
             });
         }
@@ -81,37 +93,51 @@ const PacienteController = {
 
         const errores = [];
         if (!nombre || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(nombre))
-            errores.push({ msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
+            errores.push({ param: 'nombre', msg: 'El campo Nombre es obligatorio y solo debe contener letras.' });
 
         if (!apellido || !/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/.test(apellido))
-            errores.push({ msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
+            errores.push({ param: 'apellido', msg: 'El campo Apellido es obligatorio y solo debe contener letras.' });
 
         if (!sexo || !sexosValidos.includes(sexo))
-            errores.push({ msg: 'Seleccione un sexo válido.' });
+            errores.push({ param: 'sexo', msg: 'Seleccione un sexo válido.' });
 
-        if (!dni || !/^\d{7,8}$/.test(dni))
-            errores.push({ msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+        if (!dni || !/^\d{7,8}$/.test(dni)) {
+            errores.push({ param: 'dni', msg: 'El campo DNI es obligatorio y debe tener 7 u 8 números.' });
+        } else {
+            try {
+                const pacienteExistente = await Paciente.buscarPorDni(dni);
+                if (pacienteExistente && pacienteExistente.id !== parseInt(id)) {
+                    errores.push({ param: 'dni', msg: 'El DNI ingresado ya pertenece a otro paciente registrado.' });
+                }
+            } catch (errDb) {
+                console.error('Error al buscar DNI existente para actualización:', errDb);
+            }
+        }
 
         if (!fechaNacimiento || isNaN(Date.parse(fechaNacimiento)) || new Date(fechaNacimiento) >= new Date())
-            errores.push({ msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
+            errores.push({ param: 'fechaNacimiento', msg: 'Ingrese una fecha de nacimiento válida y anterior a hoy.' });
 
         if (!telefono || !/^\d{8,}$/.test(telefono))
-            errores.push({ msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
+            errores.push({ param: 'telefono', msg: 'El campo Teléfono es obligatorio y debe tener al menos 8 números.' });
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-            errores.push({ msg: 'Ingrese un email válido.' });
+            errores.push({ param: 'email', msg: 'Ingrese un email válido.' });
 
         if (cp && !/^\d{4,5}$/.test(cp))
-            errores.push({ msg: 'El Código Postal debe tener 4 o 5 números.' });
+            errores.push({ param: 'cp', msg: 'El Código Postal debe tener 4 o 5 números.' });
 
         if (!provincia || !provinciasValidas.includes(provincia))
-            errores.push({ msg: 'Seleccione una provincia válida.' });
+            errores.push({ param: 'provincia', msg: 'Seleccione una provincia válida.' });
 
         if (errores.length > 0) {
+            const erroresObj = errores.reduce((obj, error) => {
+                obj[error.param] = error;
+                return obj;
+            }, {});
 
             return res.status(400).render('paciente/editar', {
                 title: `Editar Paciente: ${nombre || 'N/A'} ${apellido || 'N/A'}`,
-                errors: errores,
+                errors: erroresObj,
                 paciente: datosPacienteForm 
             });
         }
@@ -134,7 +160,9 @@ const PacienteController = {
 
             return res.status(500).render('paciente/editar', {
                 title: `Editar Paciente: ${nombre || 'N/A'} ${apellido || 'N/A'}`,
-                errors: [{ msg: 'Error al actualizar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe para otro paciente, no podrá duplicarlo.' }],
+                errors: {
+                    general: { msg: 'Error al actualizar el paciente. Verifique los datos e intente nuevamente. Si el DNI ya existe para otro paciente, no podrá duplicarlo.' }
+                },
                 paciente: datosPacienteForm
             });
         }

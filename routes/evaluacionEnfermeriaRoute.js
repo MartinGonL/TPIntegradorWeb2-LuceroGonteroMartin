@@ -1,24 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const EvaluacionEnfermeriaController = require('../controllers/evaluacionEnfermeriaController');
+const { permitirRoles } = require('../middlewares/authMiddleware');
 
 // Redirigir la raíz a admisiones
 router.get('/', (req, res) => res.redirect('/admisiones'));
 
-// Mostrar formulario para nueva evaluación
-router.get('/admision/:admisionId/nueva', EvaluacionEnfermeriaController.mostrarFormularioNueva);
+// Mostrar formulario para nueva evaluación (Sólo Enfermero y Admin)
+router.get('/admision/:admisionId/nueva', permitirRoles(['Admin', 'Enfermero']), EvaluacionEnfermeriaController.mostrarFormularioNueva);
 
-// Guardar nueva evaluación
-router.post('/admision/:admisionId', EvaluacionEnfermeriaController.guardar);
+// Guardar nueva evaluación (Sólo Enfermero y Admin)
+router.post('/admision/:admisionId', permitirRoles(['Admin', 'Enfermero']), EvaluacionEnfermeriaController.guardar);
 
-// Ver detalle de una evaluación
-router.get('/:id', EvaluacionEnfermeriaController.verDetalle);
+// Ver detalle de una evaluación (Admin, Enfermero, Medico)
+router.get('/:id', permitirRoles(['Admin', 'Enfermero', 'Medico']), EvaluacionEnfermeriaController.verDetalle);
 
-// Mostrar formulario para editar (soportando tanto /editar como /edit)
-router.get('/:id/editar', EvaluacionEnfermeriaController.mostrarFormularioEditar);
-router.get('/:id/edit', EvaluacionEnfermeriaController.mostrarFormularioEditar);
+// Mostrar formulario para editar (Sólo Enfermero y Admin)
+router.get('/:id/editar', permitirRoles(['Admin', 'Enfermero']), EvaluacionEnfermeriaController.mostrarFormularioEditar);
+router.get('/:id/edit', permitirRoles(['Admin', 'Enfermero']), EvaluacionEnfermeriaController.mostrarFormularioEditar);
 
-// Procesar actualización
-router.post('/:id/actualizar', EvaluacionEnfermeriaController.actualizar);
+// Procesar actualización (Sólo Enfermero y Admin)
+router.post('/:id/actualizar', permitirRoles(['Admin', 'Enfermero']), EvaluacionEnfermeriaController.actualizar);
 
 module.exports = router;

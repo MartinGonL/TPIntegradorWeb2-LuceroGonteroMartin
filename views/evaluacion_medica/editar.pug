@@ -27,7 +27,8 @@ block content
         p.card-text #[strong Fecha Evaluación Enf.:] #{evaluacionEnfermeria.fecha_evaluacion ? new Date(evaluacionEnfermeria.fecha_evaluacion).toLocaleString() : 'N/A'} 
         p.card-text
           a.btn.btn-violeta.btn-sm.mr-2(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}`) Ver Detalle de Evaluación de Enfermería 
-          a.btn.btn-violeta.btn-sm(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}/editar`) Editar Evaluación de Enfermería 
+          if usuario.rol === 'Admin' || usuario.rol === 'Enfermero'
+            a.btn.btn-violeta.btn-sm(href=`/evaluaciones-enfermeria/${evaluacionEnfermeria.id}/editar`) Editar Evaluación de Enfermería 
 
   
   if errors && errors.length > 0

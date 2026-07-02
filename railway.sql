@@ -118,18 +118,18 @@ CREATE TABLE `camas` (
 --
 
 INSERT INTO `camas` (`id`, `habitacion_id`, `codigo_cama`, `estado_cama`, `paciente_actual_id`, `admision_actual_id`) VALUES
-(1, 1, 'Cama-N-101-A', 'Libre', NULL, NULL),
-(2, 1, 'Cama-N-101-B', 'Libre', NULL, NULL),
-(3, 2, 'Cama-N-102-A', 'Libre', NULL, NULL),
-(4, 2, 'Cama-N-102-B', 'Libre', NULL, NULL),
-(5, 3, 'Cama-N-103', 'Libre', NULL, NULL),
-(6, 4, 'Cama-N-104', 'Libre', NULL, NULL),
-(7, 5, 'Cama-S-101-A', 'Libre', NULL, NULL),
-(8, 5, 'Cama-S-101-B', 'Libre', NULL, NULL),
-(9, 6, 'Cama-S-102-A', 'Libre', NULL, NULL),
-(10, 6, 'Cama-S-102-B', 'Libre', NULL, NULL),
-(11, 7, 'Cama-S-103', 'Libre', NULL, NULL),
-(12, 8, 'Cama-S-104', 'Libre', NULL, NULL);
+(1, 1, 'N-101A', 'Libre', NULL, NULL),
+(2, 1, 'N-101B', 'Libre', NULL, NULL),
+(3, 2, 'N-102A', 'Libre', NULL, NULL),
+(4, 2, 'N-102B', 'Libre', NULL, NULL),
+(5, 3, 'N-103', 'Libre', NULL, NULL),
+(6, 4, 'N-104', 'Libre', NULL, NULL),
+(7, 5, 'S-101A', 'Libre', NULL, NULL),
+(8, 5, 'S-101B', 'Libre', NULL, NULL),
+(9, 6, 'S-102A', 'Libre', NULL, NULL),
+(10, 6, 'S-102B', 'Libre', NULL, NULL),
+(11, 7, 'S-103', 'Libre', NULL, NULL),
+(12, 8, 'S-104', 'Libre', NULL, NULL);
 
 -- --------------------------------------------------------
 
